@@ -10,8 +10,7 @@ export function buildHome() {
       h('div', { class: 'home-mark' }, logo.svg),
       h('div', { class: 'home-words' },
         h('h1', { class: 'home-title' }, 'Type Lab'),
-        h('p', { class: 'home-line' },
-          'Playgrounds for letters: sculpt a glyph, stretch a font, set Chinese and Latin on one grid, and put text in motion.'))),
+        h('p', { class: 'home-line' }, 'Playgrounds for letters'))),
     h('nav', { class: 'home-doors', 'aria-label': 'Playgrounds' }, PLAYGROUNDS.map((p) =>
       h('a', { class: 'door', href: p.soon ? null : `#/${p.id}`, 'aria-disabled': p.soon ? 'true' : null },
         h('span', { class: 'door-glyph', lang: p.specimenLang ?? null }, p.specimen),

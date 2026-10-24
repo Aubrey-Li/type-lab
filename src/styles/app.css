@@ -178,8 +178,8 @@
 .home-hero { display: flex; align-items: center; gap: clamp(28px, 5vw, 72px); max-width: 1180px; width: 100%; margin: 0 auto; }
 .home-mark { width: clamp(150px, 24vw, 300px); flex: none; }
 .home-mark .mark { width: 100%; height: auto; }
-.home-title { font: 400 clamp(64px, 10vw, 148px)/.92 var(--serif); letter-spacing: -0.015em; margin: 0 0 22px; }
-.home-line { font-size: clamp(18px, 1.7vw, 23px); line-height: 1.5; color: var(--ink-2); max-width: 34ch; margin: 0; }
+.home-title { font: 400 clamp(64px, 10vw, 148px)/.92 var(--serif); letter-spacing: -0.015em; margin: 0 0 .36em; }
+.home-line { font-size: clamp(15px, 1.2vw, 17px); line-height: 1.5; color: var(--ink-2); margin: 0; }
 .home-doors {
   display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
   max-width: 1180px; width: 100%; margin: 0 auto; border-top: 1px solid var(--rule);
