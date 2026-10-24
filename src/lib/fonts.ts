@@ -184,8 +184,8 @@ export function metricTables(ot: Font) {
 
 const ctx = document.createElement('canvas').getContext('2d')!;
 
-export function measureText(family: string, size: number, text: string, style = 'normal') {
-  ctx.font = `${style} 400 ${size}px ${quoteFamily(family)}`;
+export function measureText(family: string, size: number, text: string, style = 'normal', weight = 400) {
+  ctx.font = `${style} ${weight} ${size}px ${quoteFamily(family)}`;
   return ctx.measureText(text);
 }
 

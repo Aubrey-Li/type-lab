@@ -1,6 +1,7 @@
 // Interface fonts. Specimen fonts are loaded on demand through lib/fonts.ts.
 import '@fontsource/eb-garamond/400.css';
 import '@fontsource/eb-garamond/400-italic.css';
+import '@fontsource/eb-garamond/800.css';
 import '@fontsource/source-sans-3/400.css';
 import '@fontsource/source-sans-3/600.css';
 import '@fontsource/jetbrains-mono/400.css';

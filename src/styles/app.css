@@ -175,11 +175,33 @@
   opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s;
 }
 .home.is-active { opacity: 1; visibility: visible; transition: opacity .5s ease .05s, visibility 0s; }
-.home-hero { display: flex; align-items: center; gap: clamp(28px, 5vw, 72px); max-width: 1180px; width: 100%; margin: 0 auto; }
-.home-mark { width: clamp(150px, 24vw, 300px); flex: none; }
+.home-hero { max-width: 1180px; width: 100%; margin: 0 auto; }
+/* "TypeLab", each letter a window onto a collage texture. */
+.home-word {
+  font: 800 clamp(96px, 19.5vw, 290px)/.9 var(--serif); letter-spacing: -0.01em;
+  margin: 0; padding-bottom: .2em; white-space: nowrap; user-select: none;
+}
+.cut-letter {
+  position: relative; display: inline-block; cursor: crosshair;
+  /* A hairline edge keeps pale textures readable on a pale page. */
+  filter: drop-shadow(0 0 .6px color-mix(in oklab, var(--ink) 45%, transparent));
+}
+.cut-layer {
+  display: inline-block; color: transparent; -webkit-text-fill-color: transparent;
+  background-size: cover; -webkit-background-clip: text; background-clip: text;
+  padding: 0 .04em .14em; margin: 0 -.04em -.14em;   /* room for overhangs and descenders */
+  opacity: 0; transition: opacity .7s ease;
+}
+.cut-layer + .cut-layer { position: absolute; left: 0; top: 0; }
+.cut-layer.is-front { opacity: 1; }
+.home-sub { display: flex; align-items: center; gap: 16px; }
+.home-mark { width: 44px; flex: none; }
 .home-mark .mark { width: 100%; height: auto; }
-.home-title { font: 400 clamp(64px, 10vw, 148px)/.92 var(--serif); letter-spacing: -0.015em; margin: 0 0 .36em; }
-.home-line { font-size: clamp(15px, 1.2vw, 17px); line-height: 1.5; color: var(--ink-2); margin: 0; }
+.home-mark .mark-box, .home-mark .mark-split { stroke-width: 2; }
+.home-line {
+  font-family: var(--serif); font-size: var(--label-size); letter-spacing: var(--label-track);
+  text-transform: uppercase; color: var(--ink-2); margin: 0;
+}
 .home-doors {
   display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
   max-width: 1180px; width: 100%; margin: 0 auto; border-top: 1px solid var(--rule);
