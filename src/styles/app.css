@@ -161,12 +161,11 @@
 .mark-box { fill: none; stroke: var(--ink-3); stroke-width: 1; }
 .mark-latin { font-family: var(--serif); font-size: 92px; }
 .mark-han { font-family: var(--cjk-sc); font-size: 80px; }
-.mark-latin.is-solid { fill: var(--ink); }
-.mark-han.is-solid { fill: var(--accent); }
-.mark .is-ghost { fill: none; stroke: var(--ink-3); stroke-width: .7; }
+.mark-latin { fill: var(--ink); }
+.mark-han { fill: var(--accent); }
 .mark-split { stroke: var(--accent); stroke-width: 1; }
 .wordmark { display: inline-flex; align-items: center; gap: 12px; }
-.wordmark .mark-box, .wordmark .is-ghost { stroke-width: 2.5; }
+.wordmark .mark-box { stroke-width: 2.5; }
 .wordmark .mark-split { stroke-width: 2.5; }
 
 /* ---- Home ---------------------------------------------------------------- */
@@ -206,6 +205,4 @@
   .door + .door { border-left: 0; padding-left: 0; }
   .door { border-bottom: 1px solid var(--rule); }
 }
-/* At logo size the ghosts are noise; the two solid halves carry the idea. */
-.wordmark .is-ghost { display: none; }
 .door-glyph { height: 76px; display: flex; align-items: flex-end; }

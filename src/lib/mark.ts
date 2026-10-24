@@ -1,6 +1,5 @@
 // The Type Lab mark: a Latin A and the ideograph 文 ("writing") sharing one
-// em square, divided by a hairline. On each side one script is set solid and
-// the other is a ghost outline, so both letters always read.
+// em square, divided by a hairline. Each side shows only its own script.
 import { s, uid } from './dom';
 
 const C = 50;          // centre of the 100-unit square
@@ -12,9 +11,9 @@ export function mark(opts: { size?: number; angle?: number } = {}) {
   const clipB = s('clipPath', { id: b }, half(-1));
 
   // A: EB Garamond capitals are ~0.65 em tall, so this centres it optically.
-  const latin = (cls: string) => s('text', { x: C, y: 79, 'text-anchor': 'middle', class: `mark-latin ${cls}` }, 'A');
+  const latin = () => s('text', { x: C, y: 79, 'text-anchor': 'middle', class: 'mark-latin' }, 'A');
   // 文: the CJK em box runs 0.88 em above the baseline, so the box is 8…88.
-  const han = (cls: string) => s('text', { x: 10, y: 80.4, class: `mark-han ${cls}`, lang: 'zh-Hans' }, '文');
+  const han = () => s('text', { x: 10, y: 80.4, class: 'mark-han', lang: 'zh-Hans' }, '文');
   const split = s('line', { class: 'mark-split' });
 
   const svg = s('svg', {
@@ -23,8 +22,8 @@ export function mark(opts: { size?: number; angle?: number } = {}) {
   },
   s('defs', {}, clipA, clipB),
   s('rect', { x: 1, y: 1, width: 98, height: 98, class: 'mark-box' }),
-  s('g', { 'clip-path': `url(#${a})` }, han('is-ghost'), latin('is-solid')),
-  s('g', { 'clip-path': `url(#${b})` }, latin('is-ghost'), han('is-solid')),
+  s('g', { 'clip-path': `url(#${a})` }, latin()),
+  s('g', { 'clip-path': `url(#${b})` }, han()),
   split);
 
   /** Turn the dividing line; degrees, 0 = horizontal. */
