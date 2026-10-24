@@ -150,3 +150,8 @@
 .ctl.is-off { opacity: .3; pointer-events: none; }
 .tool-switch .seg-btn { font-size: 15px; }
 .seg-btn:disabled { color: var(--ink-3); opacity: .5; cursor: default; }
+
+/* Zoom */
+.zoom .seg-btn { font-family: var(--mono); letter-spacing: 0; padding-inline: 8px; }
+.zoom .zoom-label { min-width: 5.5ch; font-size: 13px; }
+.glyph-editor.is-panning, .glyph-editor.is-panning * { cursor: grab !important; }

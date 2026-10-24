@@ -39,7 +39,7 @@ export const PLAYGROUNDS: Playground[] = [
   {
     id: 'glyph', name: 'Glyph', mount: mountGlyphLab,
     note: `<strong>Sculpt</strong>: grab the letter anywhere; everything inside the brush moves with you,
-      most at the centre. Scroll or press [ ] to size the brush. <strong>Points</strong>: move one point and its
+      most at the centre. ⌥-scroll or [ ] sizes the brush. <strong>Zoom</strong> with a pinch, ⌘-scroll or + − 0; pan by scrolling, dragging empty space, or holding Space. <strong>Points</strong>: move one point and its
       handles. <strong>Weight</strong> and <strong>Contrast</strong> push every outline in or out across the
       whole alphabet. Drag a <strong>line</strong> to stretch every letter drawn to it, and the right edge to change
       the letter’s width. Type in the strip; click a letter to edit it. ⌘Z undoes, ⇧⌘Z redoes, double-click a line

@@ -338,6 +338,11 @@ export function mountGlyphLab(root: HTMLElement) {
     for (const [key, ctl] of Object.entries(sliders)) ctl.set(state[key as keyof typeof sliders]);
   }
 
+  const zoomLabel = h('button', { type: 'button', class: 'seg-btn zoom-label', title: 'Fit (0)', onclick: () => fit() }, '100%');
+  const zoomCtl = h('span', { class: 'tool-group zoom' },
+    h('button', { type: 'button', class: 'seg-btn', 'aria-label': 'Zoom out', onclick: () => zoomAt(centre(), 0.8) }, '−'),
+    zoomLabel,
+    h('button', { type: 'button', class: 'seg-btn', 'aria-label': 'Zoom in', onclick: () => zoomAt(centre(), 1.25) }, '+'));
   const brushCtl = slider({ label: 'Brush', min: 20, max: 240, value: brush, onInput: (v) => { brush = v; drawEditor(); } });
   const toolCtl = segmented<Tool>({ options: [{ value: 'sculpt', label: 'Sculpt' }, { value: 'points', label: 'Points' }],
     value: tool, onChange: (v) => { tool = v; brushCtl.el.classList.toggle('is-off', v !== 'sculpt'); drawEditor(); } });
@@ -363,7 +368,7 @@ export function mountGlyphLab(root: HTMLElement) {
       fontPicker(''),
       h('button', { type: 'button', class: 'file-btn', onclick: () => fileInput.click() }, 'Upload'),
       fileInput,
-      toolCtl.el, brushCtl.el,
+      toolCtl.el, brushCtl.el, zoomCtl,
       h('span', { class: 'tool-group tool-end' },
         button('Glyphs', () => toggleDrawer()), undoBtn, redoBtn,
         button('Reset', () => change(() => { state = fresh(); syncSliders(); }))),
@@ -385,13 +390,18 @@ export function mountGlyphLab(root: HTMLElement) {
   const stage = h('div', { class: 'glyph-stage' }, editor, drawer, meta);
   root.append(tools, stage, h('div', { class: 'strip-wrap' }, strip), notice);
 
-  let view = { W: 800, H: 500, k: 0.4, base: 300, ox: 0 };
+  // k0/base0: the unzoomed fit. k/base/ox: what is on screen after zoom and pan.
+  let view = { W: 800, H: 500, k0: 0.4, base0: 300, k: 0.4, base: 300, ox: 0 };
+  let zoom = 1;
+  let pan: Vec = [0, 0];
+  let spaceHeld = false;
   let cursor: Vec | null = null;   // last pointer position over the editor
   type Drag =
     | { kind: 'point'; key: string }
     | { kind: 'sculpt'; start: Vec; grabbed: { p: Pt; w: number; at: Vec }[] }
     | { kind: 'line'; name: LineName }
-    | { kind: 'adv'; ox: number };
+    | { kind: 'adv'; ox: number }
+    | { kind: 'pan'; start: Vec; pan0: Vec };
   let drag: Drag | null = null;
 
   function layout() {
@@ -399,8 +409,8 @@ export function mountGlyphLab(root: HTMLElement) {
     const W = Math.max(320, r.width), H = Math.max(240, r.height);
     editor.setAttribute('viewBox', `0 0 ${W} ${H}`);
     // Scale from the original lines, so dragging a line does not rescale the view.
-    const k = (H * 0.8) / (original.asc - original.desc);
-    view = { ...view, W, H, k, base: H * 0.1 + original.asc * k };
+    const k0 = (H * 0.8) / (original.asc - original.desc);
+    view = { ...view, W, H, k0, base0: H * 0.1 + original.asc * k0 };
   }
 
   function draw() {
@@ -426,9 +436,13 @@ export function mountGlyphLab(root: HTMLElement) {
     }
     const g = ot.glyphs.get(current);
     const { cmds, adv } = mutate(g);
-    const { W, k, base } = view;
-    const ox = drag?.kind === 'adv' ? drag.ox : (W - adv * k) / 2;
-    view.ox = ox;
+    // Zoom scales about the centre of the editor; pan shifts the result.
+    const { W, H, k0, base0 } = view;
+    const k = k0 * zoom;
+    const base = (base0 - H / 2) * zoom + H / 2 + pan[1];
+    const ox = drag?.kind === 'adv' ? drag.ox : ((W - adv * k0) / 2 - W / 2) * zoom + W / 2 + pan[0];
+    view = { ...view, k, base, ox };
+    zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
     const yOf = (v: number) => base - v * k;
     const els: SVGElement[] = [];
 
@@ -570,10 +584,12 @@ export function mountGlyphLab(root: HTMLElement) {
 
   editor.addEventListener('pointerdown', (e) => {
     const ot = font.ot;
-    if (!ot || e.button !== 0) return;
+    if (!ot || (e.button !== 0 && e.button !== 1)) return;
     const t = e.target as SVGElement;
     const here = local(e);
-    if (t.dataset.line) drag = { kind: 'line', name: t.dataset.line as LineName };
+    const startPan = () => { drag = { kind: 'pan', start: here, pan0: [...pan] }; };
+    if (spaceHeld || e.button === 1) startPan();
+    else if (t.dataset.line) drag = { kind: 'line', name: t.dataset.line as LineName };
     else if (t.dataset.adv != null) drag = { kind: 'adv', ox: view.ox };
     else if (tool === 'points' && t.dataset.key) drag = { kind: 'point', key: t.dataset.key };
     else if (tool === 'sculpt') {
@@ -581,10 +597,10 @@ export function mountGlyphLab(root: HTMLElement) {
       const grabbed = screenPoints(ot.glyphs.get(current), view.ox)
         .map(({ p, at }) => ({ p, at, w: falloff(Math.hypot(at[0] - here[0], at[1] - here[1]) / brush) }))
         .filter((e) => e.w > 0);
-      if (!grabbed.length) return;
-      drag = { kind: 'sculpt', start: here, grabbed };
-    } else return;
-    begin();
+      if (grabbed.length) drag = { kind: 'sculpt', start: here, grabbed };
+      else startPan();
+    } else startPan();
+    if (drag?.kind !== 'pan') begin();
     editor.setPointerCapture(e.pointerId);
     root.classList.add('is-dragging');
     e.preventDefault();
@@ -606,6 +622,11 @@ export function mountGlyphLab(root: HTMLElement) {
       return d;
     };
 
+    if (drag.kind === 'pan') {
+      pan = [drag.pan0[0] + px - drag.start[0], drag.pan0[1] + py - drag.start[1]];
+      drawEditor();
+      return;
+    }
     if (drag.kind === 'line') {
       const L = state.lines, o = 20;
       // Lines keep their order, so the stretch stays a stretch.
@@ -643,9 +664,10 @@ export function mountGlyphLab(root: HTMLElement) {
 
   const endDrag = () => {
     if (!drag) return;
+    const wasPan = drag.kind === 'pan';
     drag = null;
     root.classList.remove('is-dragging');
-    end();
+    if (!wasPan) end();
     draw();
   };
   editor.addEventListener('pointerup', endDrag);
@@ -656,12 +678,28 @@ export function mountGlyphLab(root: HTMLElement) {
     const name = (e.target as SVGElement).dataset.line as LineName | undefined;
     if (name) change(() => { state.lines[name] = original[name]; });
   });
-  // The wheel sizes the brush.
+  // Pinch or ⌘/Ctrl-scroll zooms at the cursor; Alt-scroll sizes the brush; plain scroll pans.
   editor.addEventListener('wheel', (e) => {
-    if (tool !== 'sculpt') return;
     e.preventDefault();
-    setBrush(brush * (e.deltaY > 0 ? 0.92 : 1.08));
+    if (e.ctrlKey || e.metaKey) {
+      // A mouse-wheel notch arrives as one large delta, a trackpad pinch as many small ones.
+      const notch = e.deltaMode !== 0 || Math.abs(e.deltaY) >= 40;
+      zoomAt(local(e), notch ? (e.deltaY < 0 ? 1.2 : 1 / 1.2) : Math.exp(-e.deltaY * 0.01));
+    }
+    else if (e.altKey) setBrush(brush * (e.deltaY > 0 ? 0.92 : 1.08));
+    else { pan = [pan[0] - e.deltaX, pan[1] - e.deltaY]; drawEditor(); }
   }, { passive: false });
+
+  /** Zoom by `factor`, keeping the font point under `at` (editor px) where it is. */
+  function zoomAt(at: Vec, factor: number) {
+    const next = clamp(zoom * factor, 0.25, 16);
+    const c: Vec = [view.W / 2, view.H / 2];
+    pan = [0, 1].map((i) => at[i] - c[i] - (at[i] - c[i] - pan[i]) * (next / zoom)) as Vec;
+    zoom = next;
+    drawEditor();
+  }
+  const centre = (): Vec => [view.W / 2, view.H / 2];
+  function fit() { zoom = 1; pan = [0, 0]; drawEditor(); }
   function setBrush(v: number) {
     brush = Math.round(clamp(v, 20, 240));
     brushCtl.set(brush);
@@ -676,9 +714,20 @@ export function mountGlyphLab(root: HTMLElement) {
     const mod = e.metaKey || e.ctrlKey;
     if (mod && e.key.toLowerCase() === 'z') { e.preventDefault(); if (e.shiftKey) redo(); else undo(); return; }
     if (mod && e.key.toLowerCase() === 'y') { e.preventDefault(); redo(); return; }
-    if (target.closest('.glyph-strip') || mod) return;
+    const inStrip = !!target.closest('.glyph-strip');
+    if (mod || !inStrip) {
+      if (e.key === '=' || e.key === '+') { e.preventDefault(); zoomAt(cursor ?? centre(), 1.25); return; }
+      if (e.key === '-' || e.key === '_') { e.preventDefault(); zoomAt(cursor ?? centre(), 0.8); return; }
+      if (e.key === '0') { e.preventDefault(); fit(); return; }
+    }
+    if (inStrip || mod) return;
+    if (e.key === ' ') { e.preventDefault(); spaceHeld = true; editor.classList.add('is-panning'); return; }
     if (e.key === '[') setBrush(brush * 0.85);
     if (e.key === ']') setBrush(brush * 1.15);
+  });
+
+  document.addEventListener('keyup', (e) => {
+    if (e.key === ' ') { spaceHeld = false; editor.classList.remove('is-panning'); }
   });
 
   // ---- glyph drawer ------------------------------------------------------
