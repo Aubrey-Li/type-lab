@@ -38,11 +38,12 @@ function tools(items: { label: string; mount: (root: HTMLElement) => void }[]) {
 export const PLAYGROUNDS: Playground[] = [
   {
     id: 'glyph', name: 'Glyph', mount: mountGlyphLab,
-    note: `A letter is a few dozen points. <strong>Squares</strong> sit on the outline; <strong>circles</strong>
-      pull the curve toward them. Drag either. Drag a <strong>line</strong> to stretch every letter drawn to it,
-      and the right edge to change how much room the letter takes. Type in the strip below; click a letter to edit it.
-      Double-click a line to put it back, ⌘Z to undo. <em>Download</em> saves your font; <em>Use everywhere</em>
-      sets the other playgrounds in it.`,
+    note: `<strong>Sculpt</strong>: grab the letter anywhere; everything inside the brush moves with you,
+      most at the centre. Scroll or press [ ] to size the brush. <strong>Points</strong>: move one point and its
+      handles. <strong>Weight</strong> and <strong>Contrast</strong> push every outline in or out across the
+      whole alphabet. Drag a <strong>line</strong> to stretch every letter drawn to it, and the right edge to change
+      the letter’s width. Type in the strip; click a letter to edit it. ⌘Z undoes, ⇧⌘Z redoes, double-click a line
+      or slider to reset it. <em>Download</em> saves your font; <em>Use everywhere</em> sets the other playgrounds in it.`,
   },
   {
     id: 'anatomy', name: 'Anatomy', mount: mountAnatomy,

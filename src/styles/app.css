@@ -99,7 +99,7 @@
 .glyph-editor .pt-on, .glyph-editor .pt-off { cursor: grab; }
 .glyph-editor .pt-on { fill: var(--accent); }
 .glyph-editor .pt-off { fill: var(--bg); stroke: var(--accent); stroke-width: 1.5; }
-.glyph-editor .pt-on:hover, .glyph-editor .is-hot { fill: var(--ink); }
+.glyph-editor .pt-on:hover { fill: var(--ink); }
 .glyph-editor .pt-off:hover { stroke: var(--ink); stroke-width: 2.5; }
 .lab .is-dragging, .lab .is-dragging * { cursor: grabbing !important; }
 
@@ -137,5 +137,16 @@
 /* The glyph rail fits one row: compact sliders, output pushed to the end. */
 .lab .tool-end { margin-left: auto; }
 .playground .ctl-row { column-gap: 22px; }
-.playground input[type="range"] { width: 130px; }
+.playground input[type="range"] { width: 104px; }
 .playground .select-wrap select { min-width: 180px; }
+
+/* Sculpt brush */
+.glyph-editor .brush { fill: color-mix(in oklab, var(--accent) 7%, transparent); stroke: var(--accent); stroke-width: 1; stroke-dasharray: 2 4; pointer-events: none; }
+.glyph-editor .brush.is-down { stroke-dasharray: none; fill: color-mix(in oklab, var(--accent) 12%, transparent); }
+.glyph-editor.is-sculpt { cursor: crosshair; }
+.glyph-editor.is-sculpt .pt-on, .glyph-editor.is-sculpt .pt-off { cursor: crosshair; }
+.glyph-editor .pt-on.is-hot { fill: var(--accent); }
+.glyph-editor .pt-off.is-hot { stroke: var(--accent); stroke-width: 2; }
+.ctl.is-off { opacity: .3; pointer-events: none; }
+.tool-switch .seg-btn { font-size: 15px; }
+.seg-btn:disabled { color: var(--ink-3); opacity: .5; cursor: default; }

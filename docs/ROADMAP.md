@@ -3,14 +3,15 @@
 ## Built
 
 - Lab shell: playground tabs, settings corner (palettes), ? notes toggle.
-- Glyph: drag on/off-curve points (handles follow), drag ascender / cap height /
-  x-height / descender to stretch the alphabet, drag the advance; slant, width,
-  undo, reset; type in the strip; download as .otf or use it in every playground.
+- Glyph: Sculpt brush (soft falloff, wheel or [ ] to size), Points tool (handles
+  follow), weight and contrast across the alphabet (offset along outline normals),
+  drag the lines to stretch, drag the advance; slant, width; gesture-based
+  undo/redo; type in the strip; download as .otf or use it in every playground.
 - Anatomy, Leading, Motion, CJK (square, line breaks, direction).
 
 ## Next
 
-- **Glyph**: weight (offset the outline), add/delete points, marquee-select several points,
+- **Glyph**: cleaner weight at extremes (true outline offsetting), add/delete points, marquee-select several points,
   kerning pairs by dragging one letter toward another, save sessions.
 - **Playful entry**: a landing that is itself a playground (type a word; it reacts).
 
