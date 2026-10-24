@@ -2,7 +2,7 @@
 // and one glyph's outline with its on- and off-curve points.
 import type { Glyph } from 'opentype.js';
 import { button, row } from '../lib/controls';
-import { figureTitle, fmt, h, s } from '../lib/dom';
+import { fmt, h, s } from '../lib/dom';
 import { fontPicker } from '../lib/font-picker';
 import { fontStore, loadUpload, metricTables, type LoadedFont } from '../lib/fonts';
 
@@ -32,7 +32,6 @@ export function mountFontExplorer(root: HTMLElement) {
   );
 
   root.append(
-    figureTitle('Inside a font file'),
     h('div', { class: 'controls' }, row(fontPicker(), uploadBtn, fileInput), notice),
     body,
   );

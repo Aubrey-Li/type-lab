@@ -45,7 +45,3 @@ export const uid = (prefix: string) => `${prefix}-${++uidCounter}`;
 export const fmt = (n: number, digits = 1) => String(+n.toFixed(digits) || 0);
 
 export const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
-
-export function figureTitle(text: string) {
-  return h('h3', { class: 'fig-title' }, text);
-}

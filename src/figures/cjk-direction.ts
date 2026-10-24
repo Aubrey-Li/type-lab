@@ -1,7 +1,7 @@
 // Horizontal and vertical setting, mixed-script spacing, and upright numbers.
 // This one is plain HTML: the browser's own vertical layout is the subject.
 import { checkbox, row, segmented } from '../lib/controls';
-import { figureTitle, h } from '../lib/dom';
+import { h } from '../lib/dom';
 import { LOCALES, type Locale } from './cjk-embox';
 
 const SAMPLES: Record<Locale, string> = {
@@ -31,7 +31,7 @@ export function mountCjkDirection(root: HTMLElement) {
   );
   const sample = h('div', { class: 'cjk-sample' });
   const caption = h('p', { class: 'caption' });
-  root.append(figureTitle('Direction and spacing'), controls, sample, caption);
+  root.append(controls, sample, caption);
 
   function render() {
     const loc = LOCALES[state.locale];

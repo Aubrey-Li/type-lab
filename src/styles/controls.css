@@ -67,15 +67,7 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 .select-wrap svg { position: absolute; right: 6px; pointer-events: none; stroke: var(--ink-2); }
 .text-input { padding-right: 8px; min-width: 0; }
 
-/* Palette popover */
-.palette-trigger { display: inline-flex; align-items: center; gap: 8px; }
-.palette-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 1.5px var(--ink-3); }
-.palette-panel {
-  margin: 0; inset: 64px 24px auto auto; width: min(360px, calc(100vw - 32px));
-  background: var(--surface); color: var(--ink);
-  border: 1px solid var(--rule); border-radius: 4px; padding: 20px 22px;
-  box-shadow: 0 18px 50px rgb(0 0 0 / .25);
-}
+/* Palette settings */
 .swatches { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 18px; }
 .swatch {
   display: grid; justify-items: center; gap: 4px; padding: 10px 0 6px; cursor: pointer;
@@ -83,7 +75,7 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 }
 .swatch[aria-pressed="true"] { outline: 1.5px solid var(--accent); outline-offset: 2px; }
 .swatch-aa { font: 22px/1 var(--serif); color: var(--sw-ink); border-bottom: 2px solid var(--sw-accent); }
-.swatch-name { font: 10px var(--serif); letter-spacing: .12em; text-transform: uppercase; color: var(--sw-ink); opacity: .75; }
+.swatch-name { font: 9px var(--serif); letter-spacing: .06em; text-transform: uppercase; color: var(--sw-ink); opacity: .75; }
 .palette-inputs { display: flex; flex-direction: column; gap: 10px; }
 .palette-inputs input[type="color"] {
   width: 34px; height: 24px; padding: 0; border: 1px solid var(--rule); border-radius: 3px; background: none; cursor: pointer;

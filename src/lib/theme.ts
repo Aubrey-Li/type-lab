@@ -51,8 +51,8 @@ export function initTheme() {
   applyPalette(load());
 }
 
-/** Masthead button plus a popover for presets and custom colors. */
-export function palettePanel() {
+/** The palette section of the settings panel: presets and custom colors. */
+export function paletteSettings() {
   let palette = load();
 
   const swatches = PRESETS.map((p) =>
@@ -73,15 +73,13 @@ export function palettePanel() {
   const labels: Record<string, string> = { bg: 'Background', ink: 'Ink', accent: 'Accent' };
   const report = h('p', { class: 'palette-report' });
 
-  const panel = h('div', { id: 'palette-panel', popover: 'auto', class: 'palette-panel' },
-    h('p', { class: 'fig-title' }, 'Palette'),
+  const section = h('section', { class: 'settings-section' },
+    h('h4', { class: 'settings-heading' }, 'Palette'),
     h('div', { class: 'swatches' }, swatches),
     h('div', { class: 'palette-inputs' },
       inputs.map(({ key, input }) => h('label', { class: 'ctl' }, input, h('span', { class: 'ctl-label' }, labels[key])))),
     report,
   );
-  const trigger = h('button', { type: 'button', class: 'seg-btn palette-trigger', popovertarget: 'palette-panel' },
-    h('span', { class: 'palette-dot' }), 'Palette');
 
   function setPalette(p: Palette) {
     palette = p;
@@ -103,5 +101,5 @@ export function palettePanel() {
   }
   sync();
 
-  return h('div', { class: 'palette' }, trigger, panel);
+  return section;
 }

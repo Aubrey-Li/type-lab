@@ -2,7 +2,7 @@
 //   M = F · L · W · P · S
 // and an animation term A is inserted at whichever level it animates.
 import { button, checkbox, row, segmented, slider } from '../lib/controls';
-import { clamp, figureTitle, fmt, h, s } from '../lib/dom';
+import { clamp, fmt, h, s } from '../lib/dom';
 import { fontPicker } from '../lib/font-picker';
 import { fontStore, measureText } from '../lib/fonts';
 import { IDENTITY, about, apply, compose, formatMat, rotate, scale, toSvg, translate, type Mat } from '../lib/matrix';
@@ -88,9 +88,9 @@ export function mountTransformStack(root: HTMLElement) {
     row(fontPicker(), h('label', { class: 'ctl' }, h('span', { class: 'ctl-label' }, 'Text'), textArea)),
   );
 
-  const svg = s('svg', { viewBox: '0 0 960 480', class: 'tstack', role: 'img', 'aria-label': 'Text with per-glyph transforms' });
+  const svg = s('svg', { viewBox: '170 80 620 320', class: 'tstack', role: 'img', 'aria-label': 'Text with per-glyph transforms' });
   const readout = h('div', { class: 'readout' });
-  root.append(figureTitle('One matrix per glyph'), controls, h('div', { class: 'stage' }, svg), readout);
+  root.append(controls, h('div', { class: 'split' }, h('div', { class: 'stage' }, svg), readout));
 
   svg.addEventListener('click', (e) => {
     const i = (e.target as Element).closest<SVGElement>('.glyph')?.dataset.i;
@@ -105,6 +105,8 @@ export function mountTransformStack(root: HTMLElement) {
     else cancelAnimationFrame(raf);
   }
   function tick(now: number) {
+    // Stop when the visitor has moved on to another scene.
+    if (!root.closest('.scene')?.classList.contains('is-active')) { toggle(); return; }
     state.t = (state.t + (now - last) / 4000) % 1;
     last = now;
     timeCtl.set(state.t);

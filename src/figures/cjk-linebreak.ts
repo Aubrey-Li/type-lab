@@ -1,7 +1,7 @@
 // Breaking CJK text on a grid of em squares, with and without line-breaking
 // rules (禁则 / 禁則処理), and the three ways to satisfy them.
 import { row, segmented, slider } from '../lib/controls';
-import { figureTitle, fmt, h, s } from '../lib/dom';
+import { fmt, h, s } from '../lib/dom';
 
 type Mode = 'off' | 'hang' | 'squeeze' | 'push';
 
@@ -95,7 +95,7 @@ export function mountCjkLineBreak(root: HTMLElement) {
   const svg = s('svg', { role: 'img', 'aria-label': 'Chinese text broken into lines on a square grid' });
   const caption = h('p', { class: 'caption' });
   const readout = h('div', { class: 'readout' });
-  root.append(figureTitle('Breaking lines on a grid'), controls, h('div', { class: 'stage' }, svg), caption, readout);
+  root.append(controls, h('div', { class: 'stage' }, svg), caption, readout);
 
   function render() {
     const lines = breakLines(Array.from(TEXT), state.n, state.mode);

@@ -3,7 +3,7 @@
 // region. Regions are given per character, as fractions of that character's
 // advance box horizontally and as font lines vertically, and are tuned to
 // EB Garamond.
-import { figureTitle, h, s, uid } from '../lib/dom';
+import { h, s, uid } from '../lib/dom';
 import { measureText } from '../lib/fonts';
 
 const FAMILY = 'EB Garamond';
@@ -94,7 +94,7 @@ export function mountAnatomy(root: HTMLElement) {
   const defs = s('defs');
   svg.append(defs);
   const caption = h('p', { class: 'caption' });
-  root.append(figureTitle('The anatomy of a letter'), h('div', { class: 'stage' }, svg), caption);
+  root.append(h('div', { class: 'stage' }, svg), caption);
 
   const lines = (style: string): Record<Line, number> => ({
     base: 0,

@@ -20,8 +20,10 @@ Requires Node 20.19+ (installed here with `brew install node`).
 ## Layout
 
 ```
-index.html                  chapters and prose; each figure is a <figure data-figure="…">
-src/main.ts                 loads interface fonts, theme, then mounts figures
+index.html                  an empty shell (#app)
+src/main.ts                 loads interface fonts and theme, then mounts the app
+src/app.ts                  full-screen scenes, chapter strip, progress, ←/→ navigation, hash routing
+src/content.ts              the sequence: cover, chapter cards, scenes (prose + figure)
 src/lib/
   dom.ts                    h() / s() element builders, fmt, uid
   controls.ts               segmented, slider, checkbox, select: the shared control voice
@@ -29,6 +31,7 @@ src/lib/
   font-picker.ts            a select bound to the current font
   matrix.ts                 2D affine matrices (SVG order)
   theme.ts                  palettes: presets, custom colors, contrast check
+  settings.ts               the settings corner (bottom left); palette is its first section
 src/figures/
   anatomy.ts                I    named parts of letters (tuned to EB Garamond)
   font-explorer.ts          II   specimen, tables, glyph grid, outline with points
@@ -53,6 +56,9 @@ src/styles/
   and tables. To add a family, `npm i @fontsource/<id>` and add a `CATALOG` entry.
   WOFF2 uploads render but can't be inspected yet (opentype.js needs a
   decompressor).
+- **Scenes, not a page**: the experience is one full-screen scene at a time
+  (`#/chapter/scene`). Add a scene by adding it to `content.ts`. Figures mount
+  the first time their scene is shown, because they measure rendered text.
 - **Figures** are `mountX(root: HTMLElement)` functions that own their state and
   re-render on change; ones that use the current font subscribe to `fontStore`.
 

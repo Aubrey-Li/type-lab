@@ -1,7 +1,7 @@
 // Where a font's lines fall, and how the first baseline and the leading of a
 // text frame are derived from them.
 import { checkbox, row, segmented, select, slider } from '../lib/controls';
-import { figureTitle, fmt, h, s } from '../lib/dom';
+import { fmt, h, s } from '../lib/dom';
 import { fontPicker } from '../lib/font-picker';
 import { fontStore, measureText, verticalMetrics } from '../lib/fonts';
 
@@ -67,7 +67,7 @@ export function mountVerticalMetrics(root: HTMLElement) {
   const svg = s('svg', { viewBox: '0 0 960 340', role: 'img', 'aria-label': 'Vertical lines of a font around two lines of text' });
   const caption = h('p', { class: 'caption' });
   const readout = h('div', { class: 'readout' });
-  root.append(figureTitle('The lines a font is drawn to'), controls, h('div', { class: 'stage' }, svg), caption, readout);
+  root.append(controls, h('div', { class: 'stage' }, svg), caption, readout);
 
   function render() {
     const font = fontStore.get();

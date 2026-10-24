@@ -1,7 +1,7 @@
 // The CJK em square: where an ideograph sits relative to the Roman baseline,
 // and how the same punctuation code point is drawn differently by locale.
 import { checkbox, row, segmented } from '../lib/controls';
-import { figureTitle, h, s } from '../lib/dom';
+import { h, s } from '../lib/dom';
 
 export type Locale = 'sc' | 'tc' | 'jp';
 
@@ -41,7 +41,7 @@ export function mountCjkEmBox(root: HTMLElement) {
 
   const svg = s('svg', { viewBox: '0 0 960 620', role: 'img', 'aria-label': 'An ideograph in its em box, and punctuation compared across locales' });
   const caption = h('p', { class: 'caption' });
-  root.append(figureTitle('One square, three conventions'), controls, h('div', { class: 'stage' }, svg), caption);
+  root.append(controls, h('div', { class: 'stage' }, svg), caption);
 
   function render() {
     const loc = LOCALES[state.locale];
