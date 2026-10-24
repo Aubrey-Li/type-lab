@@ -45,7 +45,9 @@
 .lab:not(.info-on) .readout,
 .lab:not(.info-on) .caption:not(.live),
 .lab:not(.info-on) .info-only { display: none; }
-.caption.live:empty { display: none; }
+/* Live captions keep their room when empty, so the drawing above never resizes. */
+.caption.live { min-height: 3.6em; flex: none; }
+.caption.live:empty { visibility: hidden; }
 
 .info-card {
   position: absolute; right: var(--gutter); bottom: calc(var(--bottom-h) + 4px); z-index: 15;

@@ -1,10 +1,12 @@
 // The book's anatomy plate: grey words with the named part shown in red.
 // Each part is the same <text> drawn again in the accent color, clipped to a
-// region. Regions are given per character, as fractions of that character's
-// advance box horizontally and as font lines vertically, and are tuned to
-// EB Garamond.
+// region. Roman parts are found on EB Garamond's actual outlines (where a
+// stroke crosses a line, where the counters sit); the italic ones are given as
+// fractions of the character's advance box and font lines.
+import type { Font } from 'opentype.js';
 import { h, s, uid } from '../lib/dom';
-import { measureText } from '../lib/fonts';
+import { loadCatalogFont, measureText } from '../lib/fonts';
+import { analyse, type Outline } from '../lib/outline';
 
 const FAMILY = 'EB Garamond';
 const SIZE = 112;
@@ -13,13 +15,18 @@ type Line = 'base' | 'x' | 'cap' | 'asc' | 'desc';
 /** A font line, or a height in em above the baseline. */
 type Y = Line | number;
 
+/** A region in font units, measured on the character's outline: [x0, y0, x1, y1], y up. */
+type Shape = (o: Outline, m: { x: number; cap: number; asc: number }) => [number, number, number, number];
+
 interface Part {
   id: string;
   label: string;
   /** Character index, or [first, last] for a region spanning several. */
   glyph: number | [number, number];
-  x: [number, number];
-  y: [Y, Y];
+  /** Either a shape measured on the outline, or fractions of the advance box and font lines. */
+  shape?: Shape;
+  x?: [number, number];
+  y?: [Y, Y];
   /** Where the callout sits; `dx` nudges the leader along the part. */
   at: 'above' | 'below' | 'right';
   dx?: number;
@@ -41,29 +48,58 @@ interface Plate {
 const PLATES: Plate[] = [
   {
     text: 'Fancy', cx: 300, base: 170, guides: true, parts: [
-      { id: 'stem', label: 'Stem', glyph: 0, x: [0, 0.33], y: ['base', 'cap'], at: 'below', dx: 0.3 },
-      { id: 'bowl', label: 'Bowl', glyph: 1, x: [0, 0.62], y: [-0.02, 0.27], at: 'below', dx: 0.3 },
-      { id: 'serif', label: 'Serif', glyph: 2, x: [0.58, 1.02], y: [-0.02, 0.05], at: 'below', dx: 0.5 },
-      { id: 'descender', label: 'Descender', glyph: 4, x: [-0.1, 1], y: ['desc', 'base'], at: 'right' },
+      // The stem: the ink a line low on the letter crosses first (below the F's middle arm).
+      // Its width, full height, serifs left out.
+      { id: 'stem', label: 'Stem', glyph: 0, at: 'below', dx: 0.5,
+        shape: (o, m) => { const [a, b] = o.spansAt(m.cap * 0.22)[0]; return [a, 0, b, m.cap]; } },
+      // The bowl: the closed counter plus the stroke around it, up to the right-hand stem.
+      { id: 'bowl', label: 'Bowl', glyph: 1, at: 'below', dx: 0.45,
+        shape: (o) => {
+          const c = o.counters[0];
+          const stroke = c.y0 - o.box.y0;
+          const stem = o.spansAt((c.y0 + c.y1) / 2).at(-1)!;
+          return [o.box.x0, o.box.y0, stem[0], c.y1 + stroke];
+        } },
+      // The serif: the foot of the right stem, either side of it.
+      { id: 'serif', label: 'Serif', glyph: 2, at: 'below', dx: 0.5,
+        shape: (o, m) => {
+          const [a, b] = o.spansAt(m.x / 2).at(-1)!;
+          return [a - (b - a), o.box.y0, o.box.x1, 0.045 * 1000];
+        } },
+      { id: 'descender', label: 'Descender', glyph: 4, at: 'right',
+        shape: (o) => [o.box.x0, o.box.y0, o.box.x1, 0] },
     ],
   },
   {
     text: 'flesh', italic: true, cx: 735, base: 170, parts: [
       { id: 'ligature', label: 'Ligature', glyph: [0, 1], x: [0, 1.08], y: ['x', 'asc'], at: 'above', dx: 0.35 },
-      { id: 'finial', label: 'Finial', glyph: 2, x: [0.45, 1], y: [-0.02, 0.2], at: 'below', dx: 0.4 },
+      { id: 'finial', label: 'Finial', glyph: 2, x: [0.5, 1.6], y: [-0.03, 0.2], at: 'below', dx: 0.25 },
       { id: 'ascender', label: 'Ascender', glyph: 4, x: [0, 0.6], y: ['x', 'asc'], at: 'above', dx: 0.6 },
     ],
   },
   {
     text: 'fresh', cx: 300, base: 425, parts: [
-      { id: 'terminal', label: 'Terminal', glyph: 0, x: [0.45, 1.25], y: [0.56, 'asc'], at: 'above', dx: 0.3 },
-      { id: 'spine', label: 'Spine', glyph: 3, x: [0.12, 0.88], y: [0.13, 0.3], at: 'below', dx: 0.5 },
-      { id: 'ascender', label: 'Ascender', glyph: 4, x: [0, 0.5], y: ['x', 'asc'], at: 'above', dx: 0.5 },
+      // The terminal: the hooked end of the f's top, right of its stem.
+      { id: 'terminal', label: 'Terminal', glyph: 0, at: 'above', dx: 0.4,
+        shape: (o, m) => { const [, b] = o.spansAt(m.x / 2)[0]; return [b, m.x + (m.asc - m.x) * 0.45, o.box.x1, o.box.y1]; } },
+      // The spine: the middle third of the s, where its stroke crosses the letter.
+      { id: 'spine', label: 'Spine', glyph: 3, at: 'below', dx: 0.5,
+        shape: (o, m) => [o.box.x0, m.x * 0.3, o.box.x1, m.x * 0.7] },
+      // The ascender: the stem above the x-height, flag and all.
+      { id: 'ascender', label: 'Ascender', glyph: 4, at: 'above', dx: 0.5,
+        shape: (o, m) => { const [, b] = o.spansAt((m.x + m.asc) / 2)[0]; return [o.box.x0, m.x, b, o.box.y1]; } },
     ],
   },
   {
     text: 'Blood', smallCaps: [1, 4], cx: 735, base: 425, parts: [
-      { id: 'crossbar', label: 'Cross bar', glyph: 0, x: [0.12, 0.72], y: [0.29, 0.37], at: 'below', dx: 0.2 },
+      // The cross bar: between the B's two counters, right of the stem, to where the bowls meet.
+      { id: 'crossbar', label: 'Cross bar', glyph: 0, at: 'below', dx: 0.5,
+        shape: (o, m) => {
+          const [lower, upper] = o.counters;
+          const [, stem] = o.spansAt(m.cap / 4)[0];
+          // A little past the counters' edges, so the join reads as a stroke.
+          return [stem, lower.y1 - 12, Math.max(lower.x1, upper.x1), upper.y0 + 12];
+        } },
       { id: 'small-capital', label: 'Small capital', glyph: 1, x: [0, 1], y: ['desc', 'asc'], at: 'above', dx: 0.3 },
       { id: 'counter', label: 'Counter', glyph: 3, x: [0.5, 0.5], y: [0.24, 0.24], at: 'below', dot: true },
       { id: 'lowercase', label: 'Lowercase', glyph: 4, x: [0, 1], y: ['desc', 'asc'], at: 'above', dx: 0.6 },
@@ -89,6 +125,9 @@ const DEFINITIONS: Record<string, string> = {
 
 const DEFAULT_CAPTION = '';
 
+/** EB Garamond's lines in font units (OS/2 x-height and cap height; the top of b, d, h). */
+const FONT_LINES = { x: 400, cap: 650, asc: 705 };
+
 export function mountAnatomy(root: HTMLElement) {
   const svg = s('svg', { viewBox: '0 0 960 520', class: 'anatomy', role: 'img', 'aria-label': 'Annotated letterforms: Fancy, flesh, fresh, Blood' });
   const defs = s('defs');
@@ -106,7 +145,12 @@ export function mountAnatomy(root: HTMLElement) {
   const romanLines = lines('normal');
   const italicLines = lines('italic');
 
-  for (const plate of PLATES) drawPlate(plate, plate.italic ? italicLines : romanLines);
+  let roman: Font | null = null;
+  void loadCatalogFont('eb-garamond').then((f) => {
+    roman = f.ot;
+    for (const plate of PLATES) drawPlate(plate, plate.italic ? italicLines : romanLines);
+    show(pinned);
+  });
 
   // Hover previews a part, click pins it.
   let pinned: string | null = null;
@@ -125,8 +169,6 @@ export function mountAnatomy(root: HTMLElement) {
     pinned = id === pinned ? null : id;
     show(pinned ?? id);
   });
-  show(null);
-
   function drawPlate(plate: Plate, y: Record<Line, number>) {
     const text = s('text', {
       x: plate.cx, y: plate.base, 'text-anchor': 'middle', class: 'ghost',
@@ -161,9 +203,19 @@ export function mountAnatomy(root: HTMLElement) {
     for (const part of plate.parts) {
       const [i0, i1] = Array.isArray(part.glyph) ? part.glyph : [part.glyph, part.glyph];
       const a = text.getExtentOfChar(i0), b = text.getExtentOfChar(i1);
-      const span = b.x + b.width - a.x;
-      const x0 = a.x + part.x[0] * span, x1 = a.x + part.x[1] * span;
-      const top = yOf(part.y[1]), bottom = yOf(part.y[0]);
+      let x0: number, x1: number, top: number, bottom: number;
+      if (part.shape && roman && !plate.italic) {
+        // Font units → px: the character's pen position is its origin.
+        const k = SIZE / roman.unitsPerEm;
+        const [fx0, fy0, fx1, fy1] = part.shape(analyse(roman.charToGlyph(plate.text[i0])), FONT_LINES);
+        // A hair of padding so antialiased edges are not shaved off.
+        x0 = a.x + fx0 * k - 0.5; x1 = a.x + fx1 * k + 0.5;
+        top = plate.base - fy1 * k - 0.5; bottom = plate.base - fy0 * k + 0.5;
+      } else {
+        const span = b.x + b.width - a.x;
+        x0 = a.x + part.x![0] * span; x1 = a.x + part.x![1] * span;
+        top = yOf(part.y![1]); bottom = yOf(part.y![0]);
+      }
 
       const g = s('g', { 'data-part': part.id });
       if (part.dot) {
@@ -171,8 +223,14 @@ export function mountAnatomy(root: HTMLElement) {
       } else {
         const clipId = uid('anatomy-clip');
         defs.append(s('clipPath', { id: clipId }, s('rect', { x: x0, y: top, width: x1 - x0, height: bottom - top })));
-        const red = text.cloneNode(true) as SVGTextElement;
-        red.setAttribute('class', 'accent-fill');
+        // Only this part's own letters go red, set at their exact pen position, so an
+        // overhanging neighbour (italics overlap) can never show through the clip.
+        const own = plate.text.slice(i0, i1 + 1);
+        const small = plate.smallCaps && i0 >= plate.smallCaps[0] && i0 < plate.smallCaps[1];
+        const red = s('text', {
+          x: a.x, y: plate.base, class: 'accent-fill', 'font-family': FAMILY, 'font-size': SIZE,
+          'font-style': plate.italic ? 'italic' : null, style: small ? 'font-variant-caps: small-caps' : null,
+        }, own);
         g.append(s('g', { 'clip-path': `url(#${clipId})`, class: 'part', 'data-part': part.id }, red));
       }
       g.append(s('rect', { x: x0 - 4, y: top - 4, width: x1 - x0 + 8, height: bottom - top + 8, class: 'hit', 'data-part': part.id }));
