@@ -1,7 +1,7 @@
 # Type Lab
 
 A lab of typographic playgrounds: mutate a real font by dragging its points and
-lines, isolate the parts of letters, stack lines, animate text at every level of
+lines, isolate the parts of letters, travel through a variable font family, animate text at every level of
 layout, and set CJK type on its grid. Explanations stay out of the way until you
 press the ? in the corner. The look borrows from Ellen Lupton's
 *Thinking with Type*: grey specimen letters, a single red accent, tracked
@@ -36,7 +36,7 @@ src/lib/
 src/figures/
   glyph-lab.ts              Glyph    drag points, lines and advance; slant/width; download or use the result
   anatomy.ts                Anatomy  named parts of letters (tuned to EB Garamond)
-  vertical-metrics.ts       Leading  ascent, first baseline, leading, em box
+  family-lab.ts             Family   variable families: design-space pad, every axis, style grid, masters, wander
   transform-stack.ts        Motion   frame · line · segment · glyph matrices and animation
   cjk-embox.ts              CJK      em square, baselines, punctuation by locale
   cjk-linebreak.ts          CJK      line-breaking rules: hang, squeeze, push out

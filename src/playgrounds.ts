@@ -4,9 +4,9 @@ import { mountAnatomy } from './figures/anatomy';
 import { mountCjkDirection } from './figures/cjk-direction';
 import { mountCjkEmBox } from './figures/cjk-embox';
 import { mountCjkLineBreak } from './figures/cjk-linebreak';
+import { mountFamilyLab } from './figures/family-lab';
 import { mountGlyphLab } from './figures/glyph-lab';
 import { mountTransformStack } from './figures/transform-stack';
-import { mountVerticalMetrics } from './figures/vertical-metrics';
 import { segmented } from './lib/controls';
 import { h } from './lib/dom';
 
@@ -48,7 +48,7 @@ export const PLAYGROUNDS: Playground[] = [
       handles. <strong>Weight</strong> and <strong>Contrast</strong> push every outline in or out across the
       whole alphabet. Drag a <strong>line</strong> to stretch every letter drawn to it, and the right edge to change
       the letter’s width. Type in the strip; click a letter to edit it. ⌘Z undoes, ⇧⌘Z redoes, double-click a line
-      or slider to reset it. <em>Download</em> saves your font; <em>Use everywhere</em> sets the other playgrounds in it.`,
+      or slider to reset it. <em>Download</em> saves your font; <em>Use everywhere</em> sets the Motion playground in it.`,
   },
   {
     id: 'anatomy', name: 'Anatomy', mount: mountAnatomy,
@@ -57,10 +57,15 @@ export const PLAYGROUNDS: Playground[] = [
       and a font editor. Hover a label to isolate the part; click to pin it.`,
   },
   {
-    id: 'leading', name: 'Leading', mount: mountVerticalMetrics,
-    hook: 'Why lines of text land where they do.', specimen: 'Ä',
-    note: `Layout engines stack lines using the font’s numbers, not its ink: the ascent decides where the first
-      baseline falls, and leading is the distance from one baseline to the next.`,
+    id: 'family', name: 'Family', mount: mountFamilyLab,
+    hook: 'One skeleton, every weight and width between.', specimen: 'Aa',
+    note: `A <strong>family</strong> is one design drawn many ways: thin to black, narrow to wide, upright and
+      italic. A <strong>variable font</strong> holds the whole family in one file, along <strong>axes</strong>.
+      Lowercase axes are standard (<code>wght</code> weight, <code>wdth</code> width, <code>opsz</code> optical
+      size, <code>slnt</code> slant); uppercase ones are the designer’s own inventions. Drag the dot to move across
+      two axes, click a style in the grid, or let it <em>Wander</em>. <strong>Masters</strong> outlines the two
+      extremes of the horizontal axis: every style between them is interpolated. With optical size following size,
+      the headline and the paragraph each get the cut drawn for their size.`,
   },
   {
     id: 'motion', name: 'Motion', mount: mountTransformStack,
