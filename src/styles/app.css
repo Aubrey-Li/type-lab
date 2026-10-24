@@ -62,16 +62,24 @@
 .info-card em { font-family: var(--serif); font-size: 1.1em; color: var(--ink); }
 .lab.info-on .info-card { opacity: 1; transform: none; pointer-events: auto; }
 
-.info-toggle {
-  width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
+/* The two corner buttons: settings (gear) bottom-left, notes (?) bottom-right. */
+.info-toggle, .corner-btn {
+  width: 34px; height: 34px; border-radius: 50%; cursor: pointer; padding: 0;
+  display: inline-grid; place-items: center;
   font: italic 20px/1 var(--serif); color: var(--ink-2);
   background: none; border: 1.5px solid var(--ink-3);
+  transition: color .2s, background-color .2s, border-color .2s;
 }
-.info-toggle:hover, .info-toggle[aria-pressed="true"] { color: var(--bg); background: var(--accent); border-color: var(--accent); }
+.info-toggle:hover, .info-toggle[aria-pressed="true"],
+.corner-btn:hover, .corner-btn[aria-expanded="true"] { color: var(--bg); background: var(--accent); border-color: var(--accent); }
+.info-toggle:focus-visible, .corner-btn:focus-visible { outline: 1.5px solid var(--accent); outline-offset: 3px; }
+.gear { display: block; transition: transform .5s cubic-bezier(.2, .7, .2, 1); }
+.gear-teeth, .gear-ring { fill: currentColor; }
+.gear-hole { fill: var(--bg); transition: fill .2s; }
+.corner-btn:hover .gear-hole, .corner-btn[aria-expanded="true"] .gear-hole { fill: var(--accent); }
+.corner-btn:hover .gear, .corner-btn[aria-expanded="true"] .gear { transform: rotate(45deg); }
 
 /* Settings corner */
-.settings-trigger { display: inline-flex; align-items: center; gap: 10px; padding-left: 0; }
-.palette-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 1.5px var(--ink-3); }
 .settings-panel {
   margin: 0; inset: auto auto calc(var(--bottom-h) + 4px) var(--gutter);
   width: min(360px, calc(100vw - 32px));
