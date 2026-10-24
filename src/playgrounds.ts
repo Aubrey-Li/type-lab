@@ -13,6 +13,10 @@ import { h } from './lib/dom';
 export interface Playground {
   id: string;
   name: string;
+  /** One line for the home page, and a character that stands for the playground. */
+  hook: string;
+  specimen: string;
+  specimenLang?: string;
   note: string;
   mount?: (root: HTMLElement) => void;
   soon?: boolean;
@@ -38,6 +42,7 @@ function tools(items: { label: string; mount: (root: HTMLElement) => void }[]) {
 export const PLAYGROUNDS: Playground[] = [
   {
     id: 'glyph', name: 'Glyph', mount: mountGlyphLab,
+    hook: 'Sculpt the curves of a real font, then keep it.', specimen: 'g',
     note: `<strong>Sculpt</strong>: grab the letter anywhere; everything inside the brush moves with you,
       most at the centre. ⌥-scroll or [ ] sizes the brush. <strong>Zoom</strong> with a pinch, ⌘-scroll or + − 0; pan by scrolling, dragging empty space, or holding Space. <strong>Points</strong>: move one point and its
       handles. <strong>Weight</strong> and <strong>Contrast</strong> push every outline in or out across the
@@ -47,22 +52,26 @@ export const PLAYGROUNDS: Playground[] = [
   },
   {
     id: 'anatomy', name: 'Anatomy', mount: mountAnatomy,
+    hook: 'Every part of a letter has a name.', specimen: 'R',
     note: `The parts of a letter have names older than print, and they mean the same thing in a punchcutter’s shop
       and a font editor. Hover a label to isolate the part; click to pin it.`,
   },
   {
     id: 'leading', name: 'Leading', mount: mountVerticalMetrics,
+    hook: 'Why lines of text land where they do.', specimen: 'Ä',
     note: `Layout engines stack lines using the font’s numbers, not its ink: the ascent decides where the first
       baseline falls, and leading is the distance from one baseline to the next.`,
   },
   {
     id: 'motion', name: 'Motion', mount: mountTransformStack,
+    hook: 'Move text by frame, line, word or glyph.', specimen: '&',
     note: `Every glyph is drawn with one matrix, the product of the levels above it: frame, line, segment, glyph,
       <code>M = F · L · W · P · S</code>. An animation is one more term inserted at the level it moves. Click a glyph
       to read its matrices.`,
   },
   {
     id: 'cjk', name: 'CJK',
+    hook: 'Square characters, their grid and their rules.', specimen: '永', specimenLang: 'zh-Hans',
     mount: tools([
       { label: 'Square', mount: mountCjkEmBox },
       { label: 'Line breaks', mount: mountCjkLineBreak },
@@ -72,6 +81,6 @@ export const PLAYGROUNDS: Playground[] = [
       square, and where its ink sits differs by locale. Lines may break almost anywhere, except where punctuation
       would start or end a line wrongly (禁则).`,
   },
-  { id: 'grid', name: 'Grid', soon: true, note: 'Columns, gutters and the baseline grid.' },
-  { id: 'lineage', name: 'Lineage', soon: true, note: 'One letter morphing through five centuries of Garamonds.' },
+  { id: 'grid', name: 'Grid', soon: true, hook: 'Columns, gutters, a baseline grid.', specimen: '#', note: 'Columns, gutters and the baseline grid.' },
+  { id: 'lineage', name: 'Lineage', soon: true, hook: 'One letter across five centuries.', specimen: 'ſ', note: 'One letter morphing through five centuries of Garamonds.' },
 ];

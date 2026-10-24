@@ -155,3 +155,57 @@
 .zoom .seg-btn { font-family: var(--mono); letter-spacing: 0; padding-inline: 8px; }
 .zoom .zoom-label { min-width: 5.5ch; font-size: 13px; }
 .glyph-editor.is-panning, .glyph-editor.is-panning * { cursor: grab !important; }
+
+/* ---- The mark ------------------------------------------------------------ */
+.mark { display: block; overflow: visible; }
+.mark-box { fill: none; stroke: var(--ink-3); stroke-width: 1; }
+.mark-latin { font-family: var(--serif); font-size: 92px; }
+.mark-han { font-family: var(--cjk-sc); font-size: 80px; }
+.mark-latin.is-solid { fill: var(--ink); }
+.mark-han.is-solid { fill: var(--accent); }
+.mark .is-ghost { fill: none; stroke: var(--ink-3); stroke-width: .7; }
+.mark-split { stroke: var(--accent); stroke-width: 1; }
+.wordmark { display: inline-flex; align-items: center; gap: 12px; }
+.wordmark .mark-box, .wordmark .is-ghost { stroke-width: 2.5; }
+.wordmark .mark-split { stroke-width: 2.5; }
+
+/* ---- Home ---------------------------------------------------------------- */
+.home {
+  position: absolute; inset: 0; overflow: auto; padding: 0 var(--gutter);
+  display: flex; flex-direction: column; justify-content: center; gap: 7vh;
+  opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s;
+}
+.home.is-active { opacity: 1; visibility: visible; transition: opacity .5s ease .05s, visibility 0s; }
+.home-hero { display: flex; align-items: center; gap: clamp(28px, 5vw, 72px); max-width: 1180px; width: 100%; margin: 0 auto; }
+.home-mark { width: clamp(150px, 24vw, 300px); flex: none; }
+.home-mark .mark { width: 100%; height: auto; }
+.home-title { font: 400 clamp(64px, 10vw, 148px)/.92 var(--serif); letter-spacing: -0.015em; margin: 0 0 22px; }
+.home-line { font-size: clamp(18px, 1.7vw, 23px); line-height: 1.5; color: var(--ink-2); max-width: 34ch; margin: 0; }
+.home-doors {
+  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
+  max-width: 1180px; width: 100%; margin: 0 auto; border-top: 1px solid var(--rule);
+}
+.door { display: grid; grid-template-rows: auto auto 1fr; padding: 18px 16px 20px 0; text-decoration: none; color: var(--ink); }
+.door + .door { padding-left: 16px; border-left: 1px solid var(--rule); }
+.door-glyph { font: 64px/1.15 var(--serif); color: var(--ghost); transition: color .25s, transform .4s cubic-bezier(.2, .7, .2, 1); transform-origin: left bottom; }
+.door-glyph:lang(zh-Hans) { font-family: var(--cjk-sc); font-size: 54px; }
+.door-name { font-family: var(--serif); font-size: var(--label-size); letter-spacing: var(--label-track); text-transform: uppercase; margin: 6px 0 6px; }
+.door-name .soon { font-size: 9px; letter-spacing: .1em; margin-left: 6px; vertical-align: super; color: var(--ink-3); }
+.door-hook { font-size: 14px; line-height: 1.45; color: var(--ink-3); }
+.door:not([aria-disabled]):hover .door-glyph { color: var(--accent); transform: scale(1.12); }
+.door:not([aria-disabled]):hover .door-name { color: var(--accent); }
+.door[aria-disabled] { opacity: .45; cursor: default; }
+/* At home the playground tabs step back; the doors do their job. */
+.lab.at-home .pg-tabs { opacity: 0; pointer-events: none; }
+.pg-tabs { transition: opacity .3s; }
+
+@media (max-width: 1000px) {
+  .home { justify-content: flex-start; padding-top: 5vh; padding-bottom: 5vh; }
+  .home-hero { flex-direction: column; align-items: flex-start; }
+  .home-doors { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .door + .door { border-left: 0; padding-left: 0; }
+  .door { border-bottom: 1px solid var(--rule); }
+}
+/* At logo size the ghosts are noise; the two solid halves carry the idea. */
+.wordmark .is-ghost { display: none; }
+.door-glyph { height: 76px; display: flex; align-items: flex-end; }
