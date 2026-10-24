@@ -135,6 +135,25 @@ export function mountAnatomy(root: HTMLElement) {
   const caption = h('p', { class: 'caption live' });
   root.append(h('div', { class: 'stage' }, svg), caption);
 
+  // Reserve room for the longest definition at the current width, so the drawing
+  // above never resizes as definitions come and go. Re-measured when the width changes.
+  let measuredWidth = -1;
+  function reserve() {
+    const width = caption.clientWidth;
+    if (!width || width === measuredWidth) return;
+    measuredWidth = width;
+    const shown = caption.innerHTML;
+    caption.style.minHeight = '';
+    let tallest = 0;
+    for (const html of Object.values(DEFINITIONS)) {
+      caption.innerHTML = html;
+      tallest = Math.max(tallest, caption.offsetHeight);
+    }
+    caption.innerHTML = shown;
+    caption.style.minHeight = `${tallest}px`;
+  }
+  new ResizeObserver(reserve).observe(caption);
+
   const lines = (style: string): Record<Line, number> => ({
     base: 0,
     x: measureText(FAMILY, SIZE, 'x', style).actualBoundingBoxAscent,
