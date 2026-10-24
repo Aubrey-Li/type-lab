@@ -87,13 +87,13 @@ const DEFINITIONS: Record<string, string> = {
   lowercase: '<strong>Lowercase</strong>: named for the lower case of a compositor’s type case, where these letters were kept.',
 };
 
-const DEFAULT_CAPTION = 'Set in EB Garamond. Hover or click a label to isolate a part.';
+const DEFAULT_CAPTION = '';
 
 export function mountAnatomy(root: HTMLElement) {
   const svg = s('svg', { viewBox: '0 0 960 520', class: 'anatomy', role: 'img', 'aria-label': 'Annotated letterforms: Fancy, flesh, fresh, Blood' });
   const defs = s('defs');
   svg.append(defs);
-  const caption = h('p', { class: 'caption' });
+  const caption = h('p', { class: 'caption live' });
   root.append(h('div', { class: 'stage' }, svg), caption);
 
   const lines = (style: string): Record<Line, number> => ({

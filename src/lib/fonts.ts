@@ -102,20 +102,24 @@ export function loadCatalogFont(id: string): Promise<LoadedFont> {
   return p;
 }
 
-export async function loadUpload(file: File): Promise<LoadedFont> {
-  const buffer = await file.arrayBuffer();
+/** Add a font from raw bytes (an upload, or a font built in the lab) to "Your fonts". */
+export async function addFont(name: string, buffer: ArrayBuffer, file?: LoadedFont['file']): Promise<LoadedFont> {
   const key = `upload-${++uploadCount}`;
-  const base = await register(key, file.name.replace(/\.(otf|ttf|woff2?)$/i, ''), buffer);
-  const font: LoadedFont = {
-    ...base,
-    name: base.ot?.names.fullName?.en ?? base.name,
-    file: { name: file.name, bytes: file.size, format: sniffFormat(buffer) },
-  };
-  if (font.parseError && font.file?.format === 'WOFF2') {
-    font.parseError = 'WOFF2 renders fine but its outlines cannot be read yet. Upload the TTF, OTF or WOFF to inspect glyphs.';
-  }
+  const base = await register(key, name, buffer);
+  const font: LoadedFont = { ...base, file };
   uploads.push(font);
   loading.set(key, Promise.resolve(font));
+  return font;
+}
+
+export async function loadUpload(file: File): Promise<LoadedFont> {
+  const buffer = await file.arrayBuffer();
+  const format = sniffFormat(buffer);
+  const font = await addFont(file.name.replace(/\.(otf|ttf|woff2?)$/i, ''), buffer, { name: file.name, bytes: file.size, format });
+  font.name = font.ot?.names.fullName?.en ?? font.name;
+  if (font.parseError && format === 'WOFF2') {
+    font.parseError = 'WOFF2 renders fine but its outlines cannot be read yet. Upload the TTF, OTF or WOFF to edit glyphs.';
+  }
   return font;
 }
 

@@ -1,8 +1,9 @@
 # Type Lab
 
-An interactive field guide to digital type: letter anatomy, font files and their
-vertical metrics, how glyphs are placed and animated in a line, CJK typesetting,
-and the lineage of a type family. The look borrows from Ellen Lupton's
+A lab of typographic playgrounds: mutate a real font by dragging its points and
+lines, isolate the parts of letters, stack lines, animate text at every level of
+layout, and set CJK type on its grid. Explanations stay out of the way until you
+press the ? in the corner. The look borrows from Ellen Lupton's
 *Thinking with Type*: grey specimen letters, a single red accent, tracked
 small-capital labels and monospaced readouts.
 
@@ -22,8 +23,8 @@ Requires Node 20.19+ (installed here with `brew install node`).
 ```
 index.html                  an empty shell (#app)
 src/main.ts                 loads interface fonts and theme, then mounts the app
-src/app.ts                  full-screen scenes, chapter strip, progress, ←/→ navigation, hash routing
-src/content.ts              the sequence: cover, chapter cards, scenes (prose + figure)
+src/app.ts                  the lab shell: playground tabs, settings corner, ? notes toggle, hash routing
+src/playgrounds.ts          the list of playgrounds: name, short note, mount function
 src/lib/
   dom.ts                    h() / s() element builders, fmt, uid
   controls.ts               segmented, slider, checkbox, select: the shared control voice
@@ -33,13 +34,13 @@ src/lib/
   theme.ts                  palettes: presets, custom colors, contrast check
   settings.ts               the settings corner (bottom left); palette is its first section
 src/figures/
-  anatomy.ts                I    named parts of letters (tuned to EB Garamond)
-  font-explorer.ts          II   specimen, tables, glyph grid, outline with points
-  vertical-metrics.ts       II   ascent, cap height, x-height, leading, em box
-  transform-stack.ts        III  frame · line · segment · glyph matrices and animation
-  cjk-embox.ts              IV   em square, baselines, punctuation by locale
-  cjk-linebreak.ts          IV   line-breaking rules: hang, squeeze, push out
-  cjk-direction.ts          IV   vertical setting, quarter-em spacing, upright numbers
+  glyph-lab.ts              Glyph    drag points, lines and advance; slant/width; download or use the result
+  anatomy.ts                Anatomy  named parts of letters (tuned to EB Garamond)
+  vertical-metrics.ts       Leading  ascent, first baseline, leading, em box
+  transform-stack.ts        Motion   frame · line · segment · glyph matrices and animation
+  cjk-embox.ts              CJK      em square, baselines, punctuation by locale
+  cjk-linebreak.ts          CJK      line-breaking rules: hang, squeeze, push out
+  cjk-direction.ts          CJK      vertical setting, quarter-em spacing, upright numbers
 src/styles/
   tokens.css                palette tokens; every tone is mixed from bg / ink / accent
   base.css, controls.css, figures.css
@@ -56,9 +57,14 @@ src/styles/
   and tables. To add a family, `npm i @fontsource/<id>` and add a `CATALOG` entry.
   WOFF2 uploads render but can't be inspected yet (opentype.js needs a
   decompressor).
-- **Scenes, not a page**: the experience is one full-screen scene at a time
-  (`#/chapter/scene`). Add a scene by adding it to `content.ts`. Figures mount
-  the first time their scene is shown, because they measure rendered text.
+- **Playgrounds, not pages**: one full-screen playground at a time (`#/glyph`).
+  Add one in `playgrounds.ts`. They mount the first time they are shown, because
+  they measure rendered text.
+- **Progressive disclosure**: `.readout`, `.caption` and `.info-only` are hidden
+  until the ? toggle is on. Use `.caption.live` for text that appears in response
+  to the visitor (e.g. hovering an anatomy label).
+- **Edits are deltas**: the glyph playground never rewrites the font; it stores
+  point offsets, line positions, slant and width, and builds a new font on demand.
 - **Figures** are `mountX(root: HTMLElement)` functions that own their state and
   re-render on change; ones that use the current font subscribe to `fontStore`.
 

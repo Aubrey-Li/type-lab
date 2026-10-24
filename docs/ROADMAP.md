@@ -1,19 +1,18 @@
 # Roadmap
 
-## Built (v0.1)
+## Built
 
-- I Letter: anatomy plate (Fancy / flesh / fresh / Blood) with hover and pin.
-- II Font: catalog of 18 open-source families plus upload; specimen, table values,
-  glyph grid and outline view; the lines a font is drawn to (first baseline,
-  leading, larger run, em box).
-- III Text: frame → line → segment → glyph matrix chain; animation at any level;
-  text on a path.
-- IV CJK: em square and baselines, punctuation by locale (SC / TC / JP),
-  line-breaking rules on a grid, vertical setting with quarter-em spacing and
-  upright numbers.
-- Palettes: Ink, Paper, Blueprint, Riso, Moss, plus custom colors with a contrast check.
+- Lab shell: playground tabs, settings corner (palettes), ? notes toggle.
+- Glyph: drag on/off-curve points (handles follow), drag ascender / cap height /
+  x-height / descender to stretch the alphabet, drag the advance; slant, width,
+  undo, reset; type in the strip; download as .otf or use it in every playground.
+- Anatomy, Leading, Motion, CJK (square, line breaks, direction).
 
 ## Next
+
+- **Glyph**: weight (offset the outline), add/delete points, marquee-select several points,
+  kerning pairs by dragging one letter toward another, save sessions.
+- **Playful entry**: a landing that is itself a playground (type a word; it reacts).
 
 - **Grid** chapter: columns, gutters, a baseline grid the text snaps to, the measure.
 - **Lineage** chapter: interactive Garamond timeline, comparing revivals glyph by

@@ -1,8 +1,3 @@
-.fig { margin: 36px 0 64px; background: var(--surface); padding: 30px 34px 34px; border-radius: 2px; }
-.fig-title {
-  font-family: var(--serif); font-size: var(--label-size); letter-spacing: .18em;
-  text-transform: uppercase; color: var(--accent); font-weight: 400; margin: 0 0 22px;
-}
 .stage svg { display: block; width: 100%; height: auto; overflow: visible; }
 
 .caption {
@@ -38,22 +33,11 @@
 .anatomy .callout, .anatomy .hit { cursor: pointer; }
 .anatomy .hit { fill: transparent; }
 
-/* Font explorer */
-.explorer { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 34px; }
-.explorer.is-drop { outline: 1.5px dashed var(--accent); outline-offset: 10px; }
-.specimen-line {
-  font-size: 64px; line-height: 1.1; color: var(--ink); margin: 0 0 18px;
-  overflow-wrap: anywhere; outline: none;
-}
+/* Glyph cells, font meta */
 .meta { display: grid; grid-template-columns: max-content 1fr; gap: 4px 18px; margin: 0; font-size: 15px; }
 .meta dt { font-family: var(--serif); font-size: 13px; letter-spacing: var(--label-track); text-transform: uppercase; color: var(--ink-3); padding-top: 2px; }
 .meta dd { margin: 0; color: var(--ink-2); font-family: var(--mono); font-size: 13px; }
 .meta dd.text { font-family: var(--sans); font-size: 15px; }
-.glyph-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
-  border-top: 1px solid var(--rule); border-left: 1px solid var(--rule);
-  max-height: 300px; overflow-y: auto; margin-top: 22px;
-}
 .glyph-cell {
   aspect-ratio: 1; border: 0; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
   background: none; padding: 0; cursor: pointer; display: grid; place-items: center;
@@ -62,12 +46,9 @@
 .glyph-cell:hover svg { fill: var(--ink); }
 .glyph-cell[aria-pressed="true"] { background: var(--accent-wash); }
 .glyph-cell[aria-pressed="true"] svg { fill: var(--accent); }
-.more-btn { margin-top: 10px; }
-.outline-path { fill: color-mix(in oklab, var(--ghost) 55%, transparent); stroke: var(--ink); stroke-width: 1; }
 .handle { stroke: var(--ink-3); stroke-width: .8; }
 .pt-on { fill: var(--accent); }
 .pt-off { fill: var(--surface); stroke: var(--accent); stroke-width: 1.2; }
-.notice { color: var(--accent); font-size: 15px; margin: 8px 0 0; }
 
 /* Transform stack */
 .tstack .glyph { cursor: pointer; fill: var(--ghost); }
@@ -99,7 +80,4 @@
 .cjk-sample .tcy { text-combine-upright: all; color: var(--accent); }
 
 @media (max-width: 760px) {
-  .fig { padding: 22px 18px 26px; }
-  .explorer { grid-template-columns: 1fr; }
-  .specimen-line { font-size: 44px; }
-}
+    }
