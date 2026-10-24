@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Type Lab</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script type="module" src="/src/main.ts"></script>
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <a class="wordmark" href="#top">Type Lab</a>
+      <nav class="toc">
+        <a href="#letter">Letter</a>
+        <a href="#font">Font</a>
+        <a href="#text">Text</a>
+        <a href="#cjk">CJK</a>
+        <a href="#grid">Grid</a>
+        <a href="#lineage">Lineage</a>
+      </nav>
+      <div data-mount="palette"></div>
+    </header>
+
+    <section class="hero" id="top">
+      <h1>Letters, <em>lines,</em><br>and the space between.</h1>
+      <p class="prose lede">
+        An interactive field guide to digital type: the parts of a letter, the lines a font is
+        drawn to, how glyphs are placed and moved in a line of text, how Chinese, Japanese and
+        Korean type sits in its square, and how one family descends through five centuries of revivals.
+      </p>
+    </section>
+
+    <section class="chapter" id="letter">
+      <header class="chapter-head">
+        <span class="chapter-num">I</span>
+        <h2 class="chapter-title">Letter</h2>
+      </header>
+      <p class="prose">
+        Typographers name the parts of letters the way anatomists name bones. The names are old,
+        and they persist because the parts do: a <strong>stem</strong>, a <strong>bowl</strong>, a
+        <strong>serif</strong> mean the same thing in a punchcutter’s shop and in a font editor.
+        Hover a label to isolate the part; click to pin it.
+      </p>
+      <figure class="fig" data-figure="anatomy"></figure>
+    </section>
+
+    <section class="chapter" id="font">
+      <header class="chapter-head">
+        <span class="chapter-num">II</span>
+        <h2 class="chapter-title">Font</h2>
+      </header>
+      <p class="prose">
+        A font file is a set of drawings and a set of numbers. Pick one of the open-source families
+        below, or drop in a font of your own: it stays in your browser. Click any glyph to see its
+        outline, its points and the box it is set in.
+      </p>
+      <figure class="fig" data-figure="font-explorer"></figure>
+
+      <p class="prose">
+        A font never says how tall its letters are. It says where its lines are: an
+        <strong>ascent</strong> and <strong>descent</strong> reserved around a baseline, and a cap height
+        and x-height the designer drew to. Layout engines stack lines of text using those numbers,
+        not the ink. Pick a line to see where it falls, and how the first baseline and the leading
+        follow from it.
+      </p>
+      <figure class="fig" data-figure="vertical-metrics"></figure>
+    </section>
+
+    <section class="chapter" id="text">
+      <header class="chapter-head">
+        <span class="chapter-num">III</span>
+        <h2 class="chapter-title">Text</h2>
+      </header>
+      <p class="prose">
+        Laid-out text is a tree: a <strong>frame</strong> holds lines, a <strong>line</strong> holds
+        segments, a <strong>segment</strong> holds glyphs. Every glyph is finally drawn with one matrix,
+        the product of every level above it: <code>M = F · L · W · P · S</code>. An animation is one
+        more term, <code>A</code>, inserted at the level it moves. Store it as a delta keyed by index
+        at that level rather than as a final matrix: when the text reflows, the layout terms change,
+        and a stored <code>M</code> would be stale.
+      </p>
+      <figure class="fig" data-figure="transform-stack"></figure>
+    </section>
+
+    <section class="chapter" id="cjk">
+      <header class="chapter-head">
+        <span class="chapter-num">IV</span>
+        <h2 class="chapter-title">CJK <span class="chapter-sub" lang="zh-Hans">方块字</span></h2>
+      </header>
+      <p class="prose">
+        Chinese, Japanese and Korean type is designed inside a square. Each character occupies one
+        <strong>em</strong>, and text is a grid of these squares, set horizontally or vertically.
+        Punctuation shares the square too, and where its ink sits inside it differs between
+        Simplified Chinese, Traditional Chinese and Japanese, even for the same code point.
+      </p>
+      <figure class="fig" data-figure="cjk-embox"></figure>
+
+      <p class="prose">
+        Because every character is the same width, a line can break almost anywhere, but not
+        quite. <strong>Line-breaking rules</strong> (禁则 in Chinese, 禁則処理 in Japanese) keep closing
+        punctuation off the start of a line and opening punctuation off its end. The fixes are
+        to hang the punctuation in the margin, to squeeze punctuation so one more character fits,
+        or to push a character down to the next line and spread the remaining ones.
+      </p>
+      <figure class="fig" data-figure="cjk-linebreak"></figure>
+
+      <p class="prose">
+        The same text can run top to bottom, right to left. In vertical setting, punctuation takes
+        vertical forms, Latin words turn on their side, and short numbers can stand upright in a
+        single square. Where CJK meets Latin, a quarter-em gap keeps the two scripts from colliding.
+      </p>
+      <figure class="fig" data-figure="cjk-direction"></figure>
+    </section>
+
+    <section class="chapter" id="grid">
+      <header class="chapter-head">
+        <span class="chapter-num">V</span>
+        <h2 class="chapter-title">Grid</h2>
+      </header>
+      <p class="prose placeholder">
+        Coming next: columns, gutters and a baseline grid that the text snaps to, and what happens
+        to a page when the measure is too long.
+      </p>
+    </section>
+
+    <section class="chapter" id="lineage">
+      <header class="chapter-head">
+        <span class="chapter-num">VI</span>
+        <h2 class="chapter-title">Lineage</h2>
+      </header>
+      <p class="prose">
+        Draft. A typeface is rarely one design. “Garamond” names a family of interpretations,
+        and some of them are not based on Garamond at all.
+      </p>
+      <ol class="timeline">
+        <li><span class="year">1540s</span><span>Claude Garamont cuts the romans in Paris that printers would copy for two centuries.</span></li>
+        <li><span class="year">1615</span><span>Jean Jannon, in Sedan, cuts types in the same tradition. They are later misattributed to Garamond.</span></li>
+        <li><span class="year">1917</span><span>American Type Founders’ Garamond, drawn by Morris Fuller Benton and T. M. Cleland from Jannon’s types.</span></li>
+        <li><span class="year">1926</span><span>Beatrice Warde, writing as Paul Beaujon, shows that the “Garamond” revivals are Jannon’s work.</span></li>
+        <li><span class="year">1967</span><span>Jan Tschichold’s Sabon, a Garamond design built to look the same on hand, Monotype and Linotype machines.</span></li>
+        <li><span class="year">1989</span><span>Adobe Garamond by Robert Slimbach, drawn from Garamond’s romans and Granjon’s italics.</span></li>
+        <li><span class="year">2011</span><span>EB Garamond by Georg Duffner, an open-source revival and the serif on this page.</span></li>
+      </ol>
+    </section>
+  </div>
+</body>
+</html>

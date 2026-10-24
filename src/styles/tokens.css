@@ -1,0 +1,27 @@
+/* A palette is three colors: background, ink and one accent. Every other
+   tone is mixed from them, so a user palette restyles the whole site.
+   theme.ts writes --bg / --ink / --accent onto :root; these are the
+   defaults ("Ink") before it runs. */
+:root {
+  --bg: #141414;
+  --ink: #e6e2dc;
+  --accent: #ef5b4b;
+
+  --surface: color-mix(in oklab, var(--ink) 3.5%, var(--bg));
+  --ink-2: color-mix(in oklab, var(--ink) 70%, var(--bg));
+  --ink-3: color-mix(in oklab, var(--ink) 42%, var(--bg));
+  --ghost: color-mix(in oklab, var(--ink) 34%, var(--bg));   /* grey specimen letters */
+  --rule: color-mix(in oklab, var(--ink) 13%, var(--bg));
+  --accent-wash: color-mix(in oklab, var(--accent) 16%, var(--surface));
+
+  --serif: "EB Garamond", Garamond, "Times New Roman", serif;
+  --sans: "Source Sans 3", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --cjk-sc: "Noto Serif SC", "Songti SC", serif;
+  --cjk-tc: "Noto Serif TC", "Songti TC", serif;
+  --cjk-jp: "Noto Serif JP", "Hiragino Mincho ProN", serif;
+
+  /* Tracked capitals: the book's annotation voice. */
+  --label-size: 14px;
+  --label-track: 0.16em;
+}
