@@ -27,17 +27,25 @@ const rand = (n: number, k: number) => {
   return v - Math.floor(v);
 };
 
-function effect(kind: Effect, n: number, t: number, cx: number, cy: number): Mat {
-  const TAU = Math.PI * 2;
+// Bigger things move further, so the level you pick is the level you see.
+const REACH: Record<Level, number> = { frame: 2, line: 1.6, segment: 1.25, glyph: 1 };
+
+/** One loop of an effect at time t: every phase returns to rest at t = 0 and t = 1. */
+function effect(kind: Effect, level: Level, n: number, count: number, t: number, cx: number, cy: number): Mat {
+  const TAU = Math.PI * 2, k = REACH[level];
   switch (kind) {
-    case 'wave': return translate(0, -12 * Math.sin(TAU * t + n * 0.7));
-    case 'spin': return about(rotate(360 * clamp(t * 1.5 - n * 0.07, 0, 1)), cx, cy);
-    case 'pulse': return about(scale(1 + 0.22 * Math.sin(TAU * t + n * 0.7)), cx, cy);
+    case 'wave': return translate(0, -14 * k * Math.sin(TAU * t + n * 0.7));
+    case 'spin': {
+      // Each element turns once, staggered so the last one lands as the loop ends.
+      const p = clamp(t * 1.6 - n * Math.min(0.08, 0.6 / Math.max(1, count - 1)), 0, 1);
+      return about(rotate(360 * p * p * (3 - 2 * p)), cx, cy);
+    }
+    case 'pulse': return about(scale(1 + 0.25 * Math.sin(TAU * t + n * 0.7)), cx, cy);
     case 'scatter': {
-      const e = Math.sin(Math.PI * t);
+      const e = (1 - Math.cos(TAU * t)) / 2;
       return compose(
-        translate((rand(n, 0) - 0.5) * 120 * e, (rand(n, 1) - 0.5) * 90 * e),
-        about(rotate((rand(n, 2) - 0.5) * 110 * e), cx, cy),
+        translate((rand(n, 0) - 0.5) * 130 * k * e, (rand(n, 1) - 0.5) * 100 * k * e),
+        about(rotate((rand(n, 2) - 0.5) * 120 * e), cx, cy),
       );
     }
     default: return IDENTITY;
@@ -144,9 +152,12 @@ export function mountTransformStack(root: HTMLElement) {
     const k = SIZE / UNITS;                     // font px → layout px
     const hs = state.hscale / 100;
     const S = scale(k * hs, k);
-    const anim = (lvl: Level, n: number, cx: number, cy: number) =>
-      state.level === lvl ? effect(state.effect, n, state.t, cx, cy) : IDENTITY;
     const glyphCount = lines.reduce((n, l) => n + l.segments.reduce((m, sg) => m + sg.glyphs.length, 0), 0);
+    const counts: Record<Level, number> = {
+      frame: 1, line: lines.length, segment: lines.reduce((n, l) => n + l.segments.length, 0), glyph: glyphCount,
+    };
+    const anim = (lvl: Level, n: number, cx: number, cy: number) =>
+      state.level === lvl ? effect(state.effect, lvl, n, counts[lvl], state.t, cx, cy) : IDENTITY;
     state.sel = clamp(state.sel, 0, Math.max(0, glyphCount - 1));
 
     const blockW = Math.max(...lines.map((l) => l.w * k * hs), 0);
