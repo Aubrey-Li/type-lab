@@ -212,8 +212,6 @@
   font-family: var(--serif); font-size: var(--label-size); letter-spacing: var(--label-track);
   text-transform: uppercase; color: var(--ink-2); margin: 0;
 }
-.home-genre { font: 13px var(--mono); color: var(--ink-3); margin: 0 0 0 auto; }
-.home-genre::before { content: "Masks: "; }
 .home-doors {
   display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
   max-width: 1180px; width: 100%; margin: 0 auto; border-top: 1px solid var(--rule);

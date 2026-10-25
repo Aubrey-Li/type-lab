@@ -1,6 +1,6 @@
 // The landing: "TypeLab" cut out of collage textures, the mark and one line,
-// and a door into each playground. The textures come in genres; the whole
-// word moves from one genre to the next, letter by letter.
+// and a door into each playground. Each letter wears a different genre of
+// texture, and changes now and then.
 import { PLAYGROUNDS } from './playgrounds';
 import { h } from './lib/dom';
 import { measureText } from './lib/fonts';
@@ -18,18 +18,16 @@ export function buildHome() {
   const letters = Array.from(WORD).map((ch) => {
     const layers = [0, 1].map(() => h('span', { class: 'cut-layer', 'aria-hidden': 'true' }, ch));
     const el = h('span', { class: 'cut-letter' }, ...layers);
-    return { ch, el, layers, front: 0, genre: null as Genre | null, variant: -1 };
+    return { ch, el, layers, front: 0, genre: null as Genre | null };
   });
   const word = h('h1', { class: 'home-word', 'aria-label': 'Type Lab' }, letters.map((l) => l.el));
 
-  const genreLabel = h('p', { class: 'home-genre info-only', 'aria-live': 'polite' });
   const home = h('section', { class: 'home', 'aria-label': 'Type Lab' },
     h('div', { class: 'home-hero' },
       word,
       h('div', { class: 'home-sub' },
         h('div', { class: 'home-mark' }, logo.svg),
-        h('p', { class: 'home-line' }, 'Playgrounds for letters'),
-        genreLabel)),
+        h('p', { class: 'home-line' }, 'Playgrounds for letters'))),
     h('nav', { class: 'home-doors', 'aria-label': 'Playgrounds' }, PLAYGROUNDS.map((p) =>
       h('a', { class: 'door', href: p.soon ? null : `#/${p.id}`, 'aria-disabled': p.soon ? 'true' : null },
         h('span', { class: 'door-glyph', lang: p.specimenLang ?? null }, p.specimen),
@@ -39,41 +37,37 @@ export function buildHome() {
 
   // ---- textures ------------------------------------------------------------
 
-  const genres = [...GENRES].sort(() => Math.random() - 0.5);
-  let showing = 0, seed = Math.floor(Math.random() * 1e6);
+  let seed = Math.floor(Math.random() * 1e6);
 
-  /** Give letter i another variant of the current genre, one its neighbours are not wearing, fading it in. */
-  function retexture(i: number) {
-    const l = letters[i], genre = genres[showing];
-    const taken = new Set([letters[i - 1], l, letters[i + 1]].filter((n) => n?.genre === genre).map((n) => n!.variant));
-    const free = genre.painters.map((_, v) => v).filter((v) => !taken.has(v));
+  /** Dress letter i in a genre neither it nor its neighbours are wearing, fading it in. */
+  function retexture(i: number, genre?: Genre) {
+    const l = letters[i];
+    if (!genre) {
+      const taken = new Set([letters[i - 1]?.genre, l.genre, letters[i + 1]?.genre]);
+      const free = GENRES.filter((g) => !taken.has(g));
+      genre = free[Math.floor(Math.random() * free.length)];
+    }
     l.genre = genre;
-    l.variant = free.length ? free[Math.floor(Math.random() * free.length)] : Math.floor(Math.random() * genre.painters.length);
     const back = l.layers[1 - l.front];
-    back.style.backgroundImage = `url(${texture(genre, l.variant, seed++)})`;
+    back.style.backgroundImage = `url(${texture(genre, Math.floor(Math.random() * genre.painters.length), seed++)})`;
     // Random framing, so the same texture never sits the same way twice.
     back.style.backgroundPosition = `${Math.round(Math.random() * 100)}% ${Math.round(Math.random() * 100)}%`;
     l.front = 1 - l.front;
     l.layers.forEach((layer, j) => layer.classList.toggle('is-front', j === l.front));
   }
 
-  /** Move the word on to the next genre, sweeping left to right. */
-  function nextGenre(step = 1) {
-    showing = (showing + step) % genres.length;
-    genreLabel.textContent = genres[showing].name;
-    letters.forEach((_, i) => setTimeout(() => retexture(i), i * 110));
-  }
-  nextGenre(0);
-  letters.forEach((l, i) => l.el.addEventListener('pointerenter', () => retexture(i)));
+  // Deal the first hand: every letter a different genre.
+  const deck = [...GENRES].sort(() => Math.random() - 0.5);
+  letters.forEach((l, i) => {
+    retexture(i, deck[i % deck.length]);
+    l.el.addEventListener('pointerenter', () => retexture(i));
+  });
 
-  // While the home page is showing, a letter changes every few seconds, and
-  // every fourth change the whole word moves to the next genre.
+  // Every few seconds one letter changes on its own, while the home page is showing.
   const still = matchMedia('(prefers-reduced-motion: reduce)');
-  let ticks = 0;
   setInterval(() => {
     if (!home.classList.contains('is-active') || still.matches || document.hidden) return;
-    if (++ticks % 4) retexture(Math.floor(Math.random() * letters.length));
-    else nextGenre();
+    retexture(Math.floor(Math.random() * letters.length));
   }, 3200);
 
   // Kerning is lost between separate spans; put it back from the font's own pairs.
