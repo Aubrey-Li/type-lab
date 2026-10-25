@@ -326,7 +326,12 @@ export function mountFamilyLab(root: HTMLElement) {
     if (ay !== ax) values[ay.tag] = snap(ay, v);
     render();
   }
-  pad.addEventListener('pointerdown', (e) => { stop(); pad.setPointerCapture(e.pointerId); padAt(e); });
+  pad.addEventListener('pointerdown', (e) => {
+    e.preventDefault();          // a drag here is a drag, never a text selection
+    stop();
+    pad.setPointerCapture(e.pointerId);
+    padAt(e);
+  });
   pad.addEventListener('pointermove', (e) => { if (pad.hasPointerCapture(e.pointerId)) padAt(e); });
 
   // ---- wander: drift through the whole space --------------------------------

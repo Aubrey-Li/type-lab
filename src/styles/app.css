@@ -257,12 +257,12 @@
 .fam-caption { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin: 18px 0 0; }
 
 .fam-space { display: flex; flex-direction: column; gap: 14px; min-height: 0; overflow-y: auto; padding-right: 4px; }
-.fam-pad { width: 100%; aspect-ratio: 1; display: block; touch-action: none; cursor: crosshair; }
+.fam-pad { width: 100%; aspect-ratio: 1; display: block; touch-action: none; cursor: crosshair; -webkit-user-select: none; user-select: none; }
 .fam-pad-box { fill: var(--surface); stroke: var(--rule); }
 .fam-pad .guide { stroke-dasharray: 1 4; }
 .fam-cross { stroke: var(--accent); stroke-width: .6; opacity: .6; }
 .fam-dot { fill: var(--accent); stroke: var(--bg); stroke-width: 2; }
-.fam-corner { font-size: 22px; fill: var(--ink-3); }
+.fam-corner { font-size: 22px; fill: var(--ink-3); pointer-events: none; }
 .fam-pad-axes { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; }
 .fam-pad-axes .select-wrap select { min-width: 0; width: 140px; font-size: 15px; }
 .fam-sliders { display: flex; flex-direction: column; gap: 8px; }
