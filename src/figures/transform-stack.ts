@@ -105,12 +105,13 @@ export function mountTransformStack(root: HTMLElement) {
     else cancelAnimationFrame(raf);
   }
   function tick(now: number) {
-    // Stop when the visitor has moved on to another scene.
-    if (!root.closest('.scene')?.classList.contains('is-active')) { toggle(); return; }
-    state.t = (state.t + (now - last) / 4000) % 1;
+    // Hold still while another playground is showing, and pick up where it left off.
+    if (root.closest('.playground')?.classList.contains('is-active')) {
+      state.t = (state.t + (now - last) / 4000) % 1;
+      timeCtl.set(state.t);
+      render();
+    }
     last = now;
-    timeCtl.set(state.t);
-    render();
     if (state.playing) raf = requestAnimationFrame(tick);
   }
 
@@ -260,4 +261,6 @@ export function mountTransformStack(root: HTMLElement) {
 
   fontStore.subscribe(render);
   render();
+  // Start in motion, unless the visitor has asked for less of it.
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) toggle();
 }
