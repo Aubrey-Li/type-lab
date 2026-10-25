@@ -32,14 +32,22 @@
 }
 .playground.is-active { opacity: 1; visibility: visible; transition: opacity .45s ease .05s, visibility 0s; }
 .playground > .controls, .tool-pane > .controls { flex: none; margin-bottom: 12px; }
+/* Animated drawings may stray past their box; the controls stay on top and clickable. */
+.playground > .controls, .tool-pane > .controls { position: relative; z-index: 1; }
 .playground .stage, .tool-pane .stage { flex: 1; min-height: 0; display: flex; }
 .playground .stage svg { width: 100%; height: 100%; }
 .tool-pane { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .tool-pane[hidden] { display: none; }
 .tool-tabs { margin-bottom: 14px; }
 .tool-tabs .seg-btn { font-size: 15px; }
-.split { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 36px; align-items: center; }
-.split > .readout { margin-top: 0; }
+.split {
+  flex: 1; min-height: 0; display: grid; gap: 36px;
+  grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: minmax(0, 1fr);
+}
+/* The drawing fills its cell and letterboxes inside it; centred and taller
+   than the cell, it would spill up over the controls and take their clicks. */
+.split > .stage { min-height: 0; }
+.split > .readout { margin-top: 0; align-self: center; }
 
 /* Progressive disclosure: notes, captions and readouts appear only with the ? on. */
 .lab:not(.info-on) .readout,
