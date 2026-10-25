@@ -6,7 +6,7 @@
 - Glyph: Sculpt brush (soft falloff, wheel or [ ] to size), Points tool (handles
   follow), weight and contrast across the alphabet (offset along outline normals),
   drag the lines to stretch, drag the advance; slant, width; gesture-based
-  undo/redo; type in the strip; download as .otf or use it in every playground.
+  undo/redo; type in the strip; use it in every playground (in-browser only; no download).
 - Family: ten variable families (Roboto Flex, Fraunces, Recursive, Anybody, Bricolage, Source Serif,
   Literata, Inter, EB Garamond, Noto Serif SC); 2-axis design-space pad, every axis, style grid,
   masters overlay, optical size following text size, wander.

@@ -376,7 +376,6 @@ export function mountGlyphLab(root: HTMLElement) {
     row(
       sliders.weight.el, sliders.contrast.el, sliders.slant.el, sliders.width.el,
       h('span', { class: 'tool-group tool-end' },
-        button('Download', () => download()),
         button('Use everywhere', () => void useEverywhere())),
     ),
   );
@@ -775,15 +774,6 @@ export function mountGlyphLab(root: HTMLElement) {
       ascender: hhea.ascender, descender: hhea.descender, glyphs,
     });
     return { built, family };
-  }
-
-  function download() {
-    if (!font.ot) return;
-    const { built, family } = buildFont();
-    const blob = new Blob([built.toArrayBuffer()], { type: 'font/otf' });
-    const a = h('a', { href: URL.createObjectURL(blob), download: `${family.replace(/\s+/g, '')}.otf` });
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
 
   let builds = 0;

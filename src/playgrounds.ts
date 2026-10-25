@@ -48,7 +48,7 @@ export const PLAYGROUNDS: Playground[] = [
       handles. <strong>Weight</strong> and <strong>Contrast</strong> push every outline in or out across the
       whole alphabet. Drag a <strong>line</strong> to stretch every letter drawn to it, and the right edge to change
       the letter’s width. Type in the strip; click a letter to edit it. ⌘Z undoes, ⇧⌘Z redoes, double-click a line
-      or slider to reset it. <em>Download</em> saves your font; <em>Use everywhere</em> sets the Motion playground in it.`,
+      or slider to reset it. <em>Use everywhere</em> sets the other playgrounds in your edited font, in this browser only.`,
   },
   {
     id: 'anatomy', name: 'Anatomy', mount: mountAnatomy,

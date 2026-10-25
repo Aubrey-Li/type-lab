@@ -34,7 +34,7 @@ src/lib/
   theme.ts                  palettes: presets, custom colors, contrast check
   settings.ts               the settings corner (bottom left); palette is its first section
 src/figures/
-  glyph-lab.ts              Glyph    drag points, lines and advance; slant/width; download or use the result
+  glyph-lab.ts              Glyph    drag points, lines and advance; slant/width; use the result in every playground
   anatomy.ts                Anatomy  named parts of letters (tuned to EB Garamond)
   family-lab.ts             Family   variable families: design-space pad, every axis, style grid, masters, wander
   transform-stack.ts        Motion   frame · line · segment · glyph matrices and animation
