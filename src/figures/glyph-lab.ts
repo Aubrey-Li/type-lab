@@ -537,7 +537,11 @@ export function mountGlyphLab(root: HTMLElement) {
     strip.setAttribute('viewBox', `0 0 ${W} ${H}`);
     if (!ot) { strip.replaceChildren(); return; }
 
-    const glyphs = ot.stringToGlyphs(text);
+    // opentype.js throws on some substitution formats (Source Sans 3's ccmp);
+    // fall back to one glyph per character from the cmap.
+    let glyphs: Glyph[];
+    try { glyphs = ot.stringToGlyphs(text); }
+    catch { glyphs = Array.from(text, (c) => ot.charToGlyph(c)); }
     const shaped = glyphs.map((g) => ({ g, ...mutate(g) }));
     const w = state.width / 100;
     let total = 0;
