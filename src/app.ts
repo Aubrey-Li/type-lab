@@ -47,6 +47,8 @@ export function mountApp(root: HTMLElement) {
   let current: number | null = null;
   function show() {
     const id = location.hash.replace(/^#\/?/, '');
+    // CJK became part of Grid; old links land there.
+    if (id === 'cjk') { location.replace('#/grid'); return; }
     const found = PLAYGROUNDS.findIndex((p) => p.id === id && !p.soon);
     const i = found < 0 ? HOME : found;
     if (i === current) return;

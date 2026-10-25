@@ -1,6 +1,7 @@
 /* Controls share the annotation voice: tracked serif capitals, one accent. */
 .controls { display: flex; flex-direction: column; gap: 16px; margin-bottom: 28px; }
 .ctl-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 40px; }
+.ctl-row[hidden] { display: none; }
 
 .ctl-label, .seg-btn, .chk, .file-btn {
   font-family: var(--serif);
@@ -84,4 +85,3 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 .palette-report .warn { color: var(--accent); font-family: var(--sans); font-size: 13px; }
 
 /* Segmented control whose options are CJK characters rather than words */
-.seg.is-glyphs .seg-btn { font: 22px/1 var(--cjk-sc); letter-spacing: 0; padding: 6px 9px 8px; }

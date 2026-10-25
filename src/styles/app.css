@@ -31,15 +31,11 @@
   opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s;
 }
 .playground.is-active { opacity: 1; visibility: visible; transition: opacity .45s ease .05s, visibility 0s; }
-.playground > .controls, .tool-pane > .controls { flex: none; margin-bottom: 12px; }
+.playground > .controls { flex: none; margin-bottom: 12px; }
 /* Animated drawings may stray past their box; the controls stay on top and clickable. */
-.playground > .controls, .tool-pane > .controls { position: relative; z-index: 1; }
-.playground .stage, .tool-pane .stage { flex: 1; min-height: 0; display: flex; }
+.playground > .controls { position: relative; z-index: 1; }
+.playground .stage { flex: 1; min-height: 0; display: flex; }
 .playground .stage svg { width: 100%; height: 100%; }
-.tool-pane { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-.tool-pane[hidden] { display: none; }
-.tool-tabs { margin-bottom: 14px; }
-.tool-tabs .seg-btn { font-size: 15px; }
 .split {
   flex: 1; min-height: 0; display: grid; gap: 36px;
   grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: minmax(0, 1fr);
@@ -223,7 +219,7 @@
   text-transform: uppercase; color: var(--ink-2); margin: 0;
 }
 .home-doors {
-  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
+  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
   max-width: 1180px; width: 100%; margin: 0 auto; border-top: 1px solid var(--rule);
 }
 .door { display: grid; grid-template-rows: auto auto 1fr; padding: 18px 16px 20px 0; text-decoration: none; color: var(--ink); }

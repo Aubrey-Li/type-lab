@@ -2,7 +2,7 @@
 
 A lab of typographic playgrounds: mutate a real font by dragging its points and
 lines, isolate the parts of letters, travel through a variable font family, animate text at every level of
-layout, and set CJK type on its grid. Explanations stay out of the way until you
+layout, and set a page of Latin or Chinese and Japanese on its grid. Explanations stay out of the way until you
 press the ? in the corner. The look borrows from Ellen Lupton's
 *Thinking with Type*: grey specimen letters, a single red accent, tracked
 small-capital labels and monospaced readouts.
@@ -33,14 +33,16 @@ src/lib/
   matrix.ts                 2D affine matrices (SVG order)
   theme.ts                  palettes: presets, custom colors, contrast check
   settings.ts               the settings corner (bottom left); palette is its first section
+  latin-setting.ts          Latin lines: fill a measure, hyphenate at ~, justify, find rivers
+  cjk-rules.ts              CJK on the character grid: locale rules, 禁则 by hang / squeeze / push, justification
 src/figures/
   glyph-lab.ts              Glyph    drag points, lines and advance; slant/width; use the result in every playground
   anatomy.ts                Anatomy  named parts of letters (tuned to EB Garamond)
   family-lab.ts             Family   variable families: design-space pad, every axis, style grid, masters, wander
   transform-stack.ts        Motion   frame · line · segment · glyph matrices and animation
-  cjk-embox.ts              CJK      em square, baselines, punctuation by locale
-  cjk-linebreak.ts          CJK      line-breaking rules: hang, squeeze, push out
-  cjk-direction.ts          CJK      vertical setting, quarter-em spacing, upright numbers
+  grid-lab.ts               Grid     a page in Latin (baseline grid, measure, rivers) or CJK (squares, line-end
+                                     rules, vertical, mixed scripts); drag margins and gutter; a loupe per character
+  grid-texts.ts             Grid     the sample text for each script
 src/styles/
   tokens.css                palette tokens; every tone is mixed from bg / ink / accent
   base.css, controls.css, figures.css

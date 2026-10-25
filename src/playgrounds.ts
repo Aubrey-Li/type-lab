@@ -1,14 +1,10 @@
 // The lab's playgrounds. Each is a full-screen tool; `note` is the short
 // explanation shown only when the visitor asks for it (the ? in the corner).
 import { mountAnatomy } from './figures/anatomy';
-import { mountCjkDirection } from './figures/cjk-direction';
-import { mountCjkEmBox } from './figures/cjk-embox';
-import { mountCjkLineBreak } from './figures/cjk-linebreak';
 import { mountFamilyLab } from './figures/family-lab';
 import { mountGlyphLab } from './figures/glyph-lab';
+import { mountGridLab } from './figures/grid-lab';
 import { mountTransformStack } from './figures/transform-stack';
-import { segmented } from './lib/controls';
-import { h } from './lib/dom';
 
 export interface Playground {
   id: string;
@@ -22,27 +18,10 @@ export interface Playground {
   soon?: boolean;
 }
 
-/** Several tools in one playground, switched by a small tab row. Each mounts when first shown. */
-function tools(items: { label: string; mount: (root: HTMLElement) => void }[]) {
-  return (root: HTMLElement) => {
-    const panes = items.map(() => h('div', { class: 'tool-pane', hidden: true }));
-    const mounted = new Set<number>();
-    const show = (label: string) => {
-      const i = items.findIndex((t) => t.label === label);
-      panes.forEach((p, j) => { p.hidden = j !== i; });
-      if (!mounted.has(i)) { mounted.add(i); items[i].mount(panes[i]); }
-    };
-    const tabs = segmented({ options: items.map((t) => t.label), value: items[0].label, onChange: show });
-    tabs.el.classList.add('tool-tabs');
-    root.append(tabs.el, ...panes);
-    show(items[0].label);
-  };
-}
-
 export const PLAYGROUNDS: Playground[] = [
   {
     id: 'glyph', name: 'Glyph', mount: mountGlyphLab,
-    hook: 'Sculpt the curves of a real font, then keep it.', specimen: 'g',
+    hook: 'Sculpt the curves of a real font, then set type in it.', specimen: 'g',
     note: `<strong>Sculpt</strong>: grab the letter anywhere; everything inside the brush moves with you,
       most at the centre. ⌥-scroll or [ ] sizes the brush. <strong>Zoom</strong> with a pinch, ⌘-scroll or + − 0; pan by scrolling, dragging empty space, or holding Space. <strong>Points</strong>: move one point and its
       handles. <strong>Weight</strong> and <strong>Contrast</strong> push every outline in or out across the
@@ -75,17 +54,15 @@ export const PLAYGROUNDS: Playground[] = [
       to read its matrices.`,
   },
   {
-    id: 'cjk', name: 'CJK',
-    hook: 'Square characters, their grid and their rules.', specimen: '永', specimenLang: 'zh-Hans',
-    mount: tools([
-      { label: 'Square', mount: mountCjkEmBox },
-      { label: 'Line breaks', mount: mountCjkLineBreak },
-      { label: 'Direction', mount: mountCjkDirection },
-    ]),
-    note: `Chinese, Japanese and Korean type is drawn inside a square, one em per character. Punctuation shares the
-      square, and where its ink sits differs by locale. Lines may break almost anywhere, except where punctuation
-      would start or end a line wrongly (禁则).`,
+    id: 'grid', name: 'Grid', mount: mountGridLab,
+    hook: 'Set a page in lines of Latin or squares of 汉字.', specimen: '田', specimenLang: 'zh-Hans',
+    note: `<strong>Latin</strong> is measured in lines. A <strong>baseline grid</strong> keeps every column in step, the
+      <strong>measure</strong> reads best between 45 and 75 characters, and justification stretches the spaces between
+      words until they line up into <strong>rivers</strong>. <strong>Chinese and Japanese</strong> are measured in
+      characters: each fills one square, so a line is a whole number of squares and there are no spaces to stretch.
+      Punctuation does the work. Marks that may not start or end a line (禁则) are <em>hung</em> past the edge,
+      <em>squeezed</em> into the empty half of their square, or <em>pushed out</em> to the next line. Drag the edges of
+      the block or the gutter; click a character to see it in its square, and the rules it obeys.`,
   },
-  { id: 'grid', name: 'Grid', soon: true, hook: 'Columns, gutters, a baseline grid.', specimen: '#', note: 'Columns, gutters and the baseline grid.' },
   { id: 'lineage', name: 'Lineage', soon: true, hook: 'One letter across five centuries.', specimen: 'ſ', note: 'One letter morphing through five centuries of Garamonds.' },
 ];
