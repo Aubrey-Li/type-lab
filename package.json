@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "favicon": "node scripts/favicon.mjs"
   },
   "devDependencies": {
     "@types/opentype.js": "^1.3.10",
