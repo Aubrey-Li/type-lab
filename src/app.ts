@@ -32,6 +32,8 @@ export function mountApp(root: HTMLElement) {
     h('footer', { class: 'lab-bottom' }, settingsCorner(), infoBtn),
   );
   root.append(lab);
+  // The page makes room for the note, so nothing ever sits under it.
+  new ResizeObserver(() => lab.style.setProperty('--note-h', `${note.offsetHeight}px`)).observe(note);
 
   function setInfo(on: boolean) {
     lab.classList.toggle('info-on', on);

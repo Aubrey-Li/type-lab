@@ -59,7 +59,7 @@
 
 .info-card {
   position: absolute; right: var(--gutter); bottom: calc(var(--bottom-h) + 4px); z-index: 15;
-  width: min(380px, calc(100vw - 2 * var(--gutter)));
+  width: min(720px, calc(100vw - 2 * var(--gutter)));
   background: var(--surface); border: 1px solid var(--rule); border-radius: 4px;
   padding: 18px 20px; color: var(--ink-2); font-size: 15px; line-height: 1.6;
   box-shadow: 0 18px 50px rgb(0 0 0 / .22);
@@ -69,6 +69,8 @@
 .info-card strong { color: var(--ink); font-weight: 600; }
 .info-card em { font-family: var(--serif); font-size: 1.1em; color: var(--ink); }
 .lab.info-on .info-card { opacity: 1; transform: none; pointer-events: auto; }
+/* With notes on, the page ends above the card instead of running under it. */
+.lab.info-on .playgrounds { bottom: calc(var(--bottom-h) + var(--note-h, 0px) + 16px); }
 
 /* The two corner buttons: settings (gear) bottom-left, notes (?) bottom-right. */
 .info-toggle, .corner-btn {
