@@ -206,7 +206,9 @@
 .cut-layer {
   display: inline-block; color: transparent; -webkit-text-fill-color: transparent;
   background-size: cover; -webkit-background-clip: text; background-clip: text;
-  padding: 0 .04em .14em; margin: 0 -.04em -.14em;   /* room for overhangs and descenders */
+  /* Room for overhangs and descenders: the texture shows only inside this box, and the
+     tail of y reaches .28em below the baseline (the box would otherwise stop at .24em). */
+  padding: 0 .04em .3em; margin: 0 -.04em -.3em;
   opacity: 0; transition: opacity .7s ease;
 }
 .cut-layer + .cut-layer { position: absolute; left: 0; top: 0; }
