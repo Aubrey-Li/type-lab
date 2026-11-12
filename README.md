@@ -2,7 +2,8 @@
 
 A lab of typographic playgrounds: mutate a real font by dragging its points and
 lines, isolate the parts of letters, travel through a variable font family, animate text at every level of
-layout, and set a page of Latin or Chinese and Japanese on its grid. Explanations stay out of the way until you
+layout, set a page of Latin or Chinese and Japanese on its grid, and take CJK characters apart to
+animate their parts. Explanations stay out of the way until you
 press the ? in the corner. The look borrows from Ellen Lupton's
 *Thinking with Type*: grey specimen letters, a single red accent, tracked
 small-capital labels and monospaced readouts.
@@ -35,6 +36,11 @@ src/lib/
   settings.ts               the settings corner (bottom left); palette is its first section
   latin-setting.ts          Latin lines: fill a measure, hyphenate at ~, justify, find rivers
   cjk-rules.ts              CJK on the character grid: locale rules, 禁则 by hang / squeeze / push, justification
+  cjk-fonts.ts              CJK outlines: find the Fontsource subset that holds a character, fetch and parse it
+  woff.ts                   WOFF → SFNT with the browser's zlib (opentype.js can't inflate the CJK subsets)
+  bunkai.ts                 take a character apart: pieces (connected outlines), parts (cut along empty
+                            channels: 語 → 言 | 吾), ordered by stroke order (KanjiVG for Japanese and kana,
+                            Make Me a Hanzi for Chinese; fetched per character, warped onto the font)
 src/figures/
   glyph-lab.ts              Glyph    drag points, lines and advance; slant/width; use the result in every playground
   anatomy.ts                Anatomy  named parts of letters (tuned to EB Garamond)
@@ -43,6 +49,8 @@ src/figures/
   grid-lab.ts               Grid     a page in Latin (baseline grid, measure, rivers) or CJK (squares, line-end
                                      rules, vertical, mixed scripts); drag margins and gutter; a loupe per character
   grid-texts.ts             Grid     the sample text for each script
+  pieces-lab.ts             Pieces   CJK characters taken apart; parts assemble, explode, slide, drop or swirl,
+                                     staggered, in writing order or not; drag a part out
 src/styles/
   tokens.css                palette tokens; every tone is mixed from bg / ink / accent
   base.css, controls.css, figures.css

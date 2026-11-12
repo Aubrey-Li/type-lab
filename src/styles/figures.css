@@ -94,5 +94,23 @@
 .loupe-facts .k { color: var(--accent); }
 .grid-stats { flex: none; font: 13px var(--mono); color: var(--ink-2); padding: 10px 0 14px; min-height: 1.5em; }
 
+/* Pieces: one em is 1000 units here, so hairlines don't scale with the drawing. */
+.pieces { user-select: none; -webkit-user-select: none; touch-action: none; }
+.pieces .pc-ghosts { fill: var(--rule); }
+.pieces .pc-missing { fill: none; stroke: var(--ink-3); stroke-dasharray: 3 4; }
+.pieces .pc-pos { cursor: grab; }
+/* Strokes are thin: an invisible edge makes a part easier to grab. */
+.pieces .pc-ink { fill: var(--ink); stroke: transparent; stroke-width: 60; stroke-linejoin: round; }
+.pieces .pc-pos:hover .pc-ink { fill: var(--ink-2); }
+.pieces .pc-pos.is-sel .pc-ink { fill: var(--accent); }
+.pieces .pc-shock { fill: none; stroke: var(--accent); stroke-width: 1.5; }
+.pieces .pc-leader { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 4; }
+.pc-text { font-family: var(--cjk-sc), var(--serif); }
+.pc-text:lang(zh-Hant) { font-family: var(--cjk-tc), var(--serif); }
+.pc-text:lang(ja) { font-family: var(--cjk-jp), var(--serif); }
+/* Ideographic description characters (⿰ ⿱ …): Noto Serif JP draws them; the interface fonts don't. */
+.ids { font-family: "Noto Serif JP", var(--mono); font-style: normal; font-size: 1.35em; line-height: 1; vertical-align: -0.12em; color: var(--ink); }
+.pc-stats { flex: none; font: 13px var(--mono); color: var(--ink-2); padding: 10px 0 14px; min-height: 1.5em; }
+
 @media (max-width: 760px) {
     }

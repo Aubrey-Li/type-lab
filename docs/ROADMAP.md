@@ -17,11 +17,19 @@
   indent (two squares in Chinese, one in Japanese), quarter-em gaps and justification in mixed text,
   vertical with locale vertical forms and 縦中横. Drag margins and gutters; a loupe shows any
   character in its em square across locales.
+- Pieces: CJK characters taken apart into structural parts (cuts that slice almost no ink, ⿰ before ⿱)
+  or the font's connected pieces, ordered by the fixed stroke order: KanjiVG (Japanese order, kanji and
+  kana) or Make Me a Hanzi (Chinese order), fetched per character and warped onto the font (demons
+  registration) to tell which part each stroke falls in. Seven CJK families incl. Korean, each falling
+  back to the nearest design for characters it lacks; five looping effects; drag parts out.
 
 ## Next
 
 - **Glyph**: cleaner weight at extremes (true outline offsetting), add/delete points, marquee-select several points,
   kerning pairs by dragging one letter toward another, save sessions.
+- **Pieces**: name the parts (KanjiVG's component groups already do for Japanese; 照 splits as 昭 over 灬,
+  which ink alone gets wrong); Hangul stroke order (compose it from the jamo); morph one character's parts
+  into the next; export the parts as layered SVG for After Effects.
 - **Playful entry**: a landing that is itself a playground (type a word; it reacts).
 
 - **Grid**: editable text; a second page for spreads; Hangul (word spacing on the grid); ruby;

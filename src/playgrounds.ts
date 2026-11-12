@@ -4,6 +4,7 @@ import { mountAnatomy } from './figures/anatomy';
 import { mountFamilyLab } from './figures/family-lab';
 import { mountGlyphLab } from './figures/glyph-lab';
 import { mountGridLab } from './figures/grid-lab';
+import { mountPiecesLab } from './figures/pieces-lab';
 import { mountTransformStack } from './figures/transform-stack';
 
 export interface Playground {
@@ -63,6 +64,16 @@ export const PLAYGROUNDS: Playground[] = [
       Punctuation does the work. Marks that may not start or end a line (禁则) are <em>hung</em> past the edge,
       <em>squeezed</em> into the empty half of their square, or <em>pushed out</em> to the next line. Drag the edges of
       the block or the gutter; click a character to see it in its square, and the rules it obeys.`,
+  },
+  {
+    id: 'pieces', name: 'Pieces', mount: mountPiecesLab,
+    hook: 'Take 汉字 apart and set the parts in motion.', specimen: '解', specimenLang: 'zh-Hans',
+    note: `A character is built from parts; take it apart (分解) and each can move alone.
+      <strong>Parts</strong>: cut where a line slices almost no ink, left from right
+      (<span class="ids">⿰</span>) before top from bottom (<span class="ids">⿱</span>), so 語 splits into 言 and 吾;
+      dashed lines show the cuts. <strong>Pieces</strong>: the font’s separate outlines (Hangul falls into jamo).
+      <em>Writing</em> order follows the fixed stroke order, for kanji and kana as for hanzi: Japanese order from
+      KanjiVG, Chinese from Make Me a Hanzi (loaded from the web). Drag a part out; double-click to put it back.`,
   },
   { id: 'lineage', name: 'Lineage', soon: true, hook: 'One letter across five centuries.', specimen: 'ſ', note: 'One letter morphing through five centuries of Garamonds.' },
 ];
