@@ -73,7 +73,9 @@ export const PLAYGROUNDS: Playground[] = [
       (<span class="ids">⿰</span>) before top from bottom (<span class="ids">⿱</span>), so 語 splits into 言 and 吾;
       dashed lines show the cuts. <strong>Pieces</strong>: the font’s separate outlines (Hangul falls into jamo).
       <em>Writing</em> order follows the fixed stroke order, for kanji and kana as for hanzi: Japanese order from
-      KanjiVG, Chinese from Make Me a Hanzi (loaded from the web). Drag a part out; double-click to put it back.`,
+      KanjiVG, Chinese from Make Me a Hanzi (loaded from the web). Click a part to see the way it travels; drag
+      it, or its filled handle, to move where it lands, and its hollow handle to move where it starts. Double-click a
+      handle to put that end back, or the part to put both back.`,
   },
   { id: 'lineage', name: 'Lineage', soon: true, hook: 'One letter across five centuries.', specimen: 'ſ', note: 'One letter morphing through five centuries of Garamonds.' },
 ];
