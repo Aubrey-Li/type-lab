@@ -19,6 +19,10 @@ npm run build      # typecheck + production build into dist/
 
 Requires Node 20.19+ (installed here with `brew install node`).
 
+Every push to `main` builds the site and publishes it to GitHub Pages at
+<https://aubrey-li.github.io/type-lab/> (`.github/workflows/pages.yml`; the
+build is served under `/type-lab/`, set by `PAGES_BASE` in `vite.config.ts`).
+
 ## Layout
 
 ```
