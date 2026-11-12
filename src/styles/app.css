@@ -187,7 +187,8 @@
 /* ---- Home ---------------------------------------------------------------- */
 .home {
   position: absolute; inset: 0; overflow: auto; padding: 0 var(--gutter);
-  display: flex; flex-direction: column; justify-content: center; gap: 7vh;
+  /* "safe": taller than the window, the page starts at the top instead of losing it. */
+  display: flex; flex-direction: column; justify-content: safe center; gap: 7vh;
   opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s;
 }
 .home.is-active { opacity: 1; visibility: visible; transition: opacity .5s ease .05s, visibility 0s; }
@@ -219,7 +220,8 @@
   text-transform: uppercase; color: var(--ink-2); margin: 0;
 }
 .home-doors {
-  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
+  /* One column per playground, however many there are. */
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr);
   max-width: 1180px; width: 100%; margin: 0 auto; border-top: 1px solid var(--rule);
 }
 .door { display: grid; grid-template-rows: auto auto 1fr; padding: 18px 16px 20px 0; text-decoration: none; color: var(--ink); }
@@ -239,7 +241,7 @@
 @media (max-width: 1000px) {
   .home { justify-content: flex-start; padding-top: 5vh; padding-bottom: 5vh; }
   .home-hero { flex-direction: column; align-items: flex-start; }
-  .home-doors { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .home-doors { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .door + .door { border-left: 0; padding-left: 0; }
   .door { border-bottom: 1px solid var(--rule); }
 }
